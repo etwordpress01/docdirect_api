@@ -51,6 +51,7 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
                 'post_status' => 'publish',
                 'suppress_filters' => false
             );
+			
 			$options = '';
             $cust_query = get_posts($args);
 			$items	= array();
