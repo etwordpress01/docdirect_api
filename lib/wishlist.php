@@ -31,9 +31,30 @@ if (!class_exists('DocdirectWishlistRoutes')) {
          */
         public function set_wishlist($request)
         {
-            if (isset($request['current_user']) && isset($request['requested_user']))
+            if (isset($request['wl_id']))
             {
+                $user = wp_get_current_user();
+                $wishlist	= array();
+                $wishlist    = get_user_meta($user->ID,'wishlist', true);
+                $wishlist    = !empty($wishlist) && is_array( $wishlist ) ? $wishlist : array();
+                $wl_id		= sanitize_text_field( $request['wl_id'] );
 
+                if( !empty( $wl_id ) ) {
+                    $wishlist[]	= $wl_id;
+                    $wishlist = array_unique($wishlist);
+                    update_user_meta($user->ID,'wishlist',$wishlist);
+                    $json	= array();
+                    $json['type']	= 'success';
+                    $json['message']	= esc_html__('Successfully! added to your favorites','docdirect');
+                    echo json_encode($json);
+                    die();
+                }
+
+                $json	= array();
+                $json['type']	= 'error';
+                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect');
+                echo json_encode($json);
+                die();
             }
         }
 
