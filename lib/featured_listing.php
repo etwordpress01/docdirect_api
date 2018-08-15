@@ -109,6 +109,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $item['fax'] = $user->fax;
                     $item['email'] = $user->user_email;
                     $item['website'] = $user->user_url;
+                    $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
                     $items[] = $item;
                 }
 
