@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
+if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 
-    class DocdirectAppFeaturedListingRoutes extends WP_REST_Controller{
+    class DocdirectAppLatestProvidersRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -9,13 +9,13 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
         public function register_routes() {
             $version 	= '1';
             $namespace 	= 'api/v' . $version;
-            $base 		= 'listing';
+            $base 		= 'providers';
 
-            register_rest_route($namespace, '/' . $base . '/get_featured_listing',
+            register_rest_route($namespace, '/' . $base . '/latest_providers',
                 array(
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array(&$this, 'get_listing'),
+                        'callback' => array(&$this, 'get_latest_providers'),
                         'args' => array(),
                     ),
                 )
@@ -29,12 +29,10 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function get_listing($request)
+        public function get_latest_providers($request)
         {
-            $today = time();
             $show_users	= 10;
             $order		 = 'DESC';
-            $is_verify	= 'on';
 
             $query_args	= array(
                 'role'  => 'professional',
@@ -42,29 +40,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                 'number' => $show_users
             );
 
-            //Verify user
-            $meta_query_args[] = array(
-                'key'     => 'verify_user',
-                'value'   => (string)$is_verify,
-                'compare' => '='
-            );
-
-            //featured users
-            $meta_query_args[] = array(
-                'key'     => 'user_featured',
-                'value'   => $today,
-                'type' => 'numeric',
-                'compare' => '>'
-            );
-
-            if( !empty( $meta_query_args ) ) {
-                $query_relation = array('relation' => 'AND',);
-                $meta_query_args	= array_merge( $query_relation,$meta_query_args );
-                $query_args['meta_query'] = $meta_query_args;
-            }
-
-            $query_args['meta_key']	   = 'user_featured';
-            $query_args['orderby']	   = 'meta_value';
+            $query_args['orderby']	   = 'ID';
             $user_query  = new WP_User_Query($query_args);
             if ( ! empty( $user_query->results ) ) {
                 $items	= array();
@@ -75,7 +51,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
                         array('width'=>270,'height'=>270) //size width,height
                     );
-                    $review_data	= docdirect_get_everage_rating ( $user->ID );
+
                     $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
                     //$title = get_the_title($directory_type);
                     $postdata = get_post($doc_type_id);
@@ -90,15 +66,6 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $item['directoty_type_slug'] = $slug;
                     $item['directory_type_url'] = esc_url( get_permalink($doc_type_id));
                     $item['name'] = $user->first_name.' '.$user->last_name;
-                    if( isset( $reviews_switch ) && $reviews_switch === 'enable' ){
-                        $item['rating']  =  docdirect_get_rating_stars_v2($review_data,'echo');
-                    }
-                    $item['likes']= docdirect_get_likes_button($user->ID);
-                    $item['address'] = $user->user_address;
-                    $item['phone'] = $user->phone_number;
-                    $item['fax'] = $user->fax;
-                    $item['email'] = $user->user_email;
-                    $item['website'] = $user->user_url;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
                     $items[] = $item;
                 }
@@ -113,6 +80,6 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectAppFeaturedListingRoutes;
+        $controller = new DocdirectAppLatestProvidersRoutes;
         $controller->register_routes();
     });

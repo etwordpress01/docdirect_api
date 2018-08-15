@@ -67,8 +67,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-system.php';
 require plugin_dir_path( __FILE__ ) . 'hooks/hooks.php';
 require plugin_dir_path( __FILE__ ) . 'lib/user.php';
 require plugin_dir_path( __FILE__ ) . 'lib/categories.php';
+require plugin_dir_path( __FILE__ ) . 'lib/top_categories.php';
 require plugin_dir_path( __FILE__ ) . 'lib/featured_listing.php';
 require plugin_dir_path( __FILE__ ) . 'lib/wishlist.php';
+require plugin_dir_path( __FILE__ ) . 'lib/latest_providers.php';
 require plugin_dir_path( __FILE__ ) . 'lib/config.php';
 
 /**
