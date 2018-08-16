@@ -24,7 +24,7 @@ if (!class_exists('DocdirectWishlistRoutes')) {
 
 
         /**
-         * Get Featured Listing
+         * Get Wish list Data
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response

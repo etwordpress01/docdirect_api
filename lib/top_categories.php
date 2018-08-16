@@ -24,7 +24,7 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 		
 
         /**
-         * Get categories
+         * Get Parent categories
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response

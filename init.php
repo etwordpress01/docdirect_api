@@ -71,6 +71,12 @@ require plugin_dir_path( __FILE__ ) . 'lib/top_categories.php';
 require plugin_dir_path( __FILE__ ) . 'lib/featured_listing.php';
 require plugin_dir_path( __FILE__ ) . 'lib/wishlist.php';
 require plugin_dir_path( __FILE__ ) . 'lib/latest_providers.php';
+require plugin_dir_path( __FILE__ ) . 'lib/doc_detail.php';
+require plugin_dir_path( __FILE__ ) . 'lib/send_mail.php';
+require plugin_dir_path( __FILE__ ) . 'lib/submit_claim.php';
+require plugin_dir_path( __FILE__ ) . 'lib/team.php';
+require plugin_dir_path( __FILE__ ) . 'lib/make_review.php';
+require plugin_dir_path( __FILE__ ) . 'lib/reviews.php';
 require plugin_dir_path( __FILE__ ) . 'lib/config.php';
 
 /**
