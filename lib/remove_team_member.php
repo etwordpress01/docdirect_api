@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectWishlistRoutes')) {
+if (!class_exists('DocdirectAppRemoveTeamRoutes')) {
 
-    class DocdirectWishlistRoutes extends WP_REST_Controller{
+    class DocdirectAppRemoveTeamRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -9,13 +9,13 @@ if (!class_exists('DocdirectWishlistRoutes')) {
         public function register_routes() {
             $version 	= '1';
             $namespace 	= 'api/v' . $version;
-            $base 		= 'wishlist';
+            $base 		= 'manage_team';
 
-            register_rest_route($namespace, '/' . $base . '/user_wishlist',
+            register_rest_route($namespace, '/' . $base . '/remove_team',
                 array(
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array(&$this, 'set_wishlist'),
+                        'callback' => array(&$this, 'remove_team_members'),
                         'args' => array(),
                     ),
                 )
@@ -24,28 +24,28 @@ if (!class_exists('DocdirectWishlistRoutes')) {
 
 
         /**
-         * Get Wish list Data
+         * Get Team Data
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function set_wishlist($request)
-        {
-            if (!empty($request['wl_id']) && !empty($request['user_id']))
+        function remove_team_members($request) {
+            if (!empty($request['user_id']) && !empty($request['team_id']))
             {
                 $user_id = $request['user_id'];
-                $wishlist	= array();
-                $wishlist    = get_user_meta($user_id,'wishlist', true);
-                $wishlist    = !empty($wishlist) && is_array( $wishlist ) ? $wishlist : array();
-                $wl_id		= sanitize_text_field( $request['wl_id'] );
+                $teams	= array();
+                $teams    = get_user_meta($user_id,'teams_data', true);
+                $teams    = !empty($teams) && is_array( $teams ) ? $teams : array();
 
-                if( !empty( $wl_id ) ) {
-                    $wishlist[]	= $wl_id;
-                    $wishlist = array_unique($wishlist);
-                    update_user_meta($user_id,'wishlist',$wishlist);
+                if( !empty( $request['team_id'] ) ) {
+                    $team_id	= array();
+                    $team_id[]  = intval( $request['team_id']);
+                    $teams = array_diff( $teams , $team_id );
+                    update_user_meta($user_id,'teams_data',$teams);
+
                     $json	= array();
                     $json['type']	= 'success';
-                    $json['message']	= esc_html__('Successfully! added to your favorites','docdirect');
+                    $json['message']	= esc_html__('Successfully! removed from your teams','docdirect');
                     echo json_encode($json);
                     die();
                 }
@@ -55,14 +55,14 @@ if (!class_exists('DocdirectWishlistRoutes')) {
                 $json['message']	= esc_html__('Oops! something is going wrong.','docdirect');
                 echo json_encode($json);
                 die();
-            }
-        }
+
+        }   }
 
     }
 }
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectWishlistRoutes;
+        $controller = new DocdirectAppRemoveTeamRoutes;
         $controller->register_routes();
     });

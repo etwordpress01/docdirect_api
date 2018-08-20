@@ -182,8 +182,7 @@ if (!class_exists('DocdirectApp_User_Route')) {
                 
                 $user = wp_signon($creds, false);
 				
-				
-                if (is_wp_error($user)) {
+				if (is_wp_error($user)) {
                     return new WP_Error('wrong-credentials', esc_html__('Some error occur, please try again later.', 'docdirect_api'), array('status' => 500));
                 } else {
 					

@@ -144,7 +144,7 @@ if (!class_exists('DocdirectReviewsRoutes')) {
                             $item['review_date'] = human_time_diff( strtotime( $review_date ));
                             $item['image'] = esc_url( $avatar );
                             $item['content'] = $content;
-                            $item['rating'] = $percentage;
+                            $item['rating'] = $percentage."%";
                             endwhile;
                     }
 
