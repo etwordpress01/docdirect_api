@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectAppManageTeamRoutes')) {
+if (!class_exists('DocdirectAppSearchTeamMemberRoutes')) {
 
-    class DocdirectAppManageTeamRoutes extends WP_REST_Controller{
+    class DocdirectAppSearchTeamMemberRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -9,7 +9,7 @@ if (!class_exists('DocdirectAppManageTeamRoutes')) {
         public function register_routes() {
             $version 	= '1';
             $namespace 	= 'api/v' . $version;
-            $base 		= 'manage_team';
+            $base 		= 'search_team';
 
             register_rest_route($namespace, '/' . $base . '/team',
                 array(
@@ -92,6 +92,6 @@ if (!class_exists('DocdirectAppManageTeamRoutes')) {
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectAppManageTeamRoutes;
+        $controller = new DocdirectAppSearchTeamMemberRoutes;
         $controller->register_routes();
     });

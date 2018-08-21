@@ -31,10 +31,8 @@ if (!class_exists('DocdirectAppUpdateUserScheduleRoutes')) {
          */
         public function update_user_schedule($request)
         {
-            if (!empty($request['user_id']) && !empty($request['schedules']) && !empty($request['time_format']) )
+            if (!empty($request['user_id']) && !empty($request['time_format']) )
             {
-                $items = array();
-                $item = array();
                 $json	= array();
                 $user_identity	= $request['user_id'];
                 $schedules	= docdirect_sanitize_array($request['schedules']);
@@ -49,7 +47,16 @@ if (!class_exists('DocdirectAppUpdateUserScheduleRoutes')) {
                 echo json_encode($json);
                 die;
 
-           }
+            }
+            else
+            {
+                $json	= array();
+                $json['type']	= 'error';
+                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect');
+                echo json_encode($json);
+                die();
+            }
+
 
 
         }

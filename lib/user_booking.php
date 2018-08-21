@@ -141,19 +141,13 @@ if (!class_exists('DocdirectBookingListRoutes')) {
 
                         $time = explode('-',$bk_slottime);
 
+                        $item['Status'] = esc_attr( docdirect_prepare_order_status( 'value',$bk_status ) );
                         $item['id'] = intval( $post->ID );
                         $item['TRACKING ID'] = esc_attr( $bk_code );
                         $item['subject'] = esc_attr( $bk_subject );
                         $item['phone'] = esc_attr( $bk_userphone );
                         $item['user name'] = esc_attr( $bk_username );
                         $item['email'] =esc_attr( $bk_useremail );
-                        if( isset( $bk_status ) && $bk_status == 'approved'){
-                            $item['status'] = "approved";
-                        }elseif(isset( $bk_status ) && $bk_status == 'cancelled'){
-                            $item['status'] = "cancelled";
-                        }else{
-                            $item['status'] = "pending";
-                        }
                         if( !empty( $services_cats[$bk_category] ) ){
                             $item['Category'] = $services_cats[$bk_category];
                         }
@@ -164,8 +158,7 @@ if (!class_exists('DocdirectBookingListRoutes')) {
                             $item['Appointment date'] = date($date_format,strtotime($bk_booking_date));
                         }
                         $item['Meeting Time'] = date_i18n($time_format,strtotime('2016-01-01 '.$time[0]) );
-                        $item['Status'] = esc_attr( docdirect_prepare_order_status( 'value',$bk_status ) );
-                        $item['Payment Type'] = esc_attr( docdirect_prepare_payment_type( 'value',$bk_payment ) );
+                        $item['Payment Type'] = esc_attr( docdirect_prepare_payment_type( 'value',$bk_payment ));
                         if( !empty( $payment_amount ) ){
                             $item['Appointment Fee'] = $payment_amount;
                         }

@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectChangeAppointmentStatusRoutes')) {
+if (!class_exists('DocdirectUpdateAppointmentStatusRoutes')) {
 
-    class DocdirectChangeAppointmentStatusRoutes extends WP_REST_Controller{
+    class DocdirectUpdateAppointmentStatusRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -11,11 +11,11 @@ if (!class_exists('DocdirectChangeAppointmentStatusRoutes')) {
             $namespace 	= 'api/v' . $version;
             $base 		= 'appointment';
 
-            register_rest_route($namespace, '/' . $base . '/change_appointment',
+            register_rest_route($namespace, '/' . $base . '/update_appointment',
                 array(
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array($this, 'change_appointment_status'),
+                        'callback' => array($this, 'update_appointment_status'),
                         'args' => array(),
                     ),
                 )
@@ -29,7 +29,7 @@ if (!class_exists('DocdirectChangeAppointmentStatusRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        function change_appointment_status($request)
+        function update_appointment_status($request)
         {
             if(!empty($request['user_id']) && !empty($request['appointment_id']) && !empty($request['type']))
             {
@@ -95,6 +95,6 @@ if (!class_exists('DocdirectChangeAppointmentStatusRoutes')) {
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectChangeAppointmentStatusRoutes;
+        $controller = new DocdirectUpdateAppointmentStatusRoutes;
         $controller->register_routes();
     });

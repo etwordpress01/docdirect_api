@@ -79,7 +79,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/make_review.php';
 require plugin_dir_path( __FILE__ ) . 'lib/reviews.php';
 require plugin_dir_path( __FILE__ ) . 'lib/profile_setting.php';
 require plugin_dir_path( __FILE__ ) . 'lib/specialities.php';
-require plugin_dir_path( __FILE__ ) . 'lib/manage_team.php';
+require plugin_dir_path( __FILE__ ) . 'lib/search_team_member.php';
 require plugin_dir_path( __FILE__ ) . 'lib/add_team_member.php';
 require plugin_dir_path( __FILE__ ) . 'lib/remove_team_member.php';
 require plugin_dir_path( __FILE__ ) . 'lib/config.php';
@@ -88,7 +88,12 @@ require plugin_dir_path( __FILE__ ) . 'lib/packages.php';
 require plugin_dir_path( __FILE__ ) . 'lib/user_schedule.php';
 require plugin_dir_path( __FILE__ ) . 'lib/update_schedule.php';
 require plugin_dir_path( __FILE__ ) . 'lib/user_booking.php';
-require plugin_dir_path( __FILE__ ) . 'lib/change_appointment_status.php';
+require plugin_dir_path( __FILE__ ) . 'lib/update_appointment_status.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/security_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/delete_deactivate_account.php';
+require plugin_dir_path( __FILE__ ) . 'lib/privacy_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
 
 /**
  * Begins execution of the plugin.
