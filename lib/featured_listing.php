@@ -14,7 +14,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
             register_rest_route($namespace, '/' . $base . '/get_featured_listing',
                 array(
                   array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_listing'),
                         'args' => array(),
                     ),
@@ -77,7 +77,6 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     );
                     $review_data	= docdirect_get_everage_rating ( $user->ID );
                     $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
-                    //$title = get_the_title($directory_type);
                     $postdata = get_post($doc_type_id);
                     $slug 	 = $postdata->post_name;
                     //$item =  $user;

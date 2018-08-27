@@ -93,6 +93,14 @@ require plugin_dir_path( __FILE__ ) . 'lib/booking_setting.php';
 require plugin_dir_path( __FILE__ ) . 'lib/security_setting.php';
 require plugin_dir_path( __FILE__ ) . 'lib/delete_deactivate_account.php';
 require plugin_dir_path( __FILE__ ) . 'lib/privacy_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/languages.php';
+require plugin_dir_path( __FILE__ ) . 'lib/insurance_list.php';
+require plugin_dir_path( __FILE__ ) . 'lib/directory_search.php';
+require plugin_dir_path( __FILE__ ) . 'lib/blog_post.php';
+require plugin_dir_path( __FILE__ ) . 'lib/articles/articles.php';
+require plugin_dir_path( __FILE__ ) . 'lib/articles/create_article.php';
+require plugin_dir_path( __FILE__ ) . 'lib/articles/delete_article.php';
+require plugin_dir_path( __FILE__ ) . 'lib/articles/manage_articles.php';
 require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
 
 /**

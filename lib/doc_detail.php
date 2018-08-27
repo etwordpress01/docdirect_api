@@ -15,7 +15,7 @@ if (!class_exists('DocdirectAppDocDetailRoutes')) {
                 array(
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array(&$this, 'get_doc_detail'),
+                        'callback' => array($this, 'get_doc_detail'),
                         'args' => array(),
                     ),
                 )
