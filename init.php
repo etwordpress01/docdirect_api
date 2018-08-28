@@ -96,11 +96,26 @@ require plugin_dir_path( __FILE__ ) . 'lib/privacy_setting.php';
 require plugin_dir_path( __FILE__ ) . 'lib/languages.php';
 require plugin_dir_path( __FILE__ ) . 'lib/insurance_list.php';
 require plugin_dir_path( __FILE__ ) . 'lib/directory_search.php';
-require plugin_dir_path( __FILE__ ) . 'lib/blog_post.php';
+require plugin_dir_path( __FILE__ ) . 'lib/blog/blog_post.php';
+require plugin_dir_path( __FILE__ ) . 'lib/blog/blog_post_detail.php';
+require plugin_dir_path( __FILE__ ) . 'lib/blog/recent_post.php';
+require plugin_dir_path( __FILE__ ) . 'lib/blog/blog_categories.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/articles.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/create_article.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/delete_article.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/manage_articles.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/question.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/recent_questions.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/vote.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/submit_answer.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/answer.php';
+require plugin_dir_path( __FILE__ ) . 'lib/question_answer/statics.php';
+require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_social_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_basic_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_awards_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_experience_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_qualification_setting.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/update_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
 
 /**

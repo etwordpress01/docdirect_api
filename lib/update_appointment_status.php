@@ -34,8 +34,6 @@ if (!class_exists('DocdirectUpdateAppointmentStatusRoutes')) {
             if(!empty($request['user_id']) && !empty($request['appointment_id']) && !empty($request['type']))
             {
                 $user_id = $request['user_id'];
-                global $wp_roles, $userdata, $post;
-                $user_identity = $user_id;
 
                 $type = esc_attr($request['type']);
                 $post_id = esc_attr($request['appointment_id']);

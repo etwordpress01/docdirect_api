@@ -38,19 +38,6 @@ if (!class_exists('DocdirectSubmitProfileSettingRoutes')) {
             {
 
                 $user_identity = $request['user_id'];
-                //Update Socials
-                if (isset($request['socials']) && !empty($request['socials'])) {
-                    foreach ( $request['socials'] as $key => $value ) {
-                        update_user_meta($user_identity, $key, esc_attr($value));
-                    }
-                }
-
-                //Update Basics
-                if (!empty($request['basics'])) {
-                    foreach ($request['basics'] as $key => $value) {
-                        update_user_meta($user_identity, $key, esc_attr($value));
-                    }
-                }
 
                 //Professional Statements
                 if (!empty($request['professional_statements'])) {
@@ -67,22 +54,6 @@ if (!class_exists('DocdirectSubmitProfileSettingRoutes')) {
 
                 update_user_meta($user_identity, 'video_url', esc_url($request['video_url']));
                 wp_update_user(array('ID' => $user_identity, 'user_url' => esc_url($request['basics']['user_url'])));
-
-                //Awards
-                $awards = array();
-                if (!empty($request['awards'])) {
-
-                    $counter = 0;
-                    foreach ($request['awards'] as $key => $value) {
-                        $awards[$counter]['name'] = esc_attr($value['name']);
-                        $awards[$counter]['date'] = esc_attr($value['date']);
-                        $awards[$counter]['date_formated'] = date_i18n('d M, Y', strtotime(esc_attr($value['date'])));
-                        $awards[$counter]['description'] = esc_attr($value['description']);
-                        $counter++;
-                    }
-                    $json['awards'] = $awards;
-                }
-                update_user_meta($user_identity, 'awards', $awards);
 
                 //Specialities
                 $db_directory_type = get_user_meta($user_identity, 'directory_type', true);
@@ -138,43 +109,6 @@ if (!class_exists('DocdirectSubmitProfileSettingRoutes')) {
                     $json['education'] = $educations;
                 }
                 update_user_meta($user_identity, 'education', $educations);
-
-                //Experience
-                $experiences = array();
-                if (!empty($request['experience'])) {
-                    $counter = 0;
-                    foreach ($request['experience'] as $key => $value) {
-                        if (!empty($value['title']) && !empty($value['company'])) {
-                            $experiences[$counter]['title'] = esc_attr($value['title']);
-                            $experiences[$counter]['company'] = esc_attr($value['company']);
-                            $experiences[$counter]['start_date'] = esc_attr($value['start_date']);
-                            $experiences[$counter]['end_date'] = esc_attr($value['end_date']);
-                            $experiences[$counter]['start_date_formated'] = date_i18n('M,Y', strtotime(esc_attr($value['start_date'])));
-                            $experiences[$counter]['end_date_formated'] = date_i18n('M,Y', strtotime(esc_attr($value['end_date'])));
-                            $experiences[$counter]['description'] = esc_attr($value['description']);
-                            $counter++;
-                        }
-                    }
-                    $json['experience'] = $experiences;
-                }
-                update_user_meta($user_identity, 'experience', $experiences);
-
-                //Experience
-                $prices = array();
-                if (!empty($request['prices'])) {
-                    $counter = 0;
-                    foreach ($request['prices'] as $key => $value) {
-                        if (!empty($value['title'])) {
-                            $prices[$counter]['title'] = esc_attr($value['title']);
-                            $prices[$counter]['price'] = esc_attr($value['price']);
-                            $prices[$counter]['description'] = esc_attr($value['description']);
-                            $counter++;
-                        }
-                    }
-                    $json['prices_list'] = $prices;
-                }
-
-                update_user_meta($user_identity, 'prices_list', $prices);
 
                 //Languages
                 $languages = array();
