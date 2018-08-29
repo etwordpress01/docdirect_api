@@ -1,4 +1,6 @@
 <?php
+require_once( ABSPATH . 'wp-admin/includes/file.php' );
+require_once( ABSPATH . 'wp-admin/includes/image.php' );
 if (!class_exists('DocdirectCreateArticlesRoutes')) {
 
     class DocdirectCreateArticlesRoutes extends WP_REST_Controller
@@ -57,7 +59,45 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                 $title = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect');
                 $article_detail = force_balance_tags($request['article_detail']);
 
-                $attachment_id = !empty($request['attachment_id']) ? intval($request['attachment_id']) : '';
+                $submitted_file = $_FILES[ 'feature_image' ];
+                $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );
+
+                if ( !empty( $uploaded_image[ 'file' ] ) ){
+                    $file_name = basename( $submitted_file[ 'name' ] );
+                    $file_type = wp_check_filetype( $uploaded_image[ 'file' ] );
+
+                    // Prepare an array of post data for the attachment.
+                    $attachment_details = array(
+                        'guid' => $uploaded_image[ 'url' ],
+                        'post_mime_type' => $file_type[ 'type' ],
+                        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $file_name ) ),
+                        'post_content' => '',
+                        'post_status' => 'inherit'
+                    );
+
+                    $attach_id 	 = wp_insert_attachment( $attachment_details, $uploaded_image[ 'file' ] );
+                    $attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded_image[ 'file' ] );
+                    wp_update_attachment_metadata( $attach_id, $attach_data );
+
+                    //Image Size
+                    $image_size	= 'thumbnail';
+                    $thumbnail_url = docdirect_get_profile_image_url( $attach_data,$image_size ); //get image url
+                }else{
+                    $json['type'] = 'error';
+                    $json['message'] = esc_html__('image upload failed.', 'docdirect');
+                    echo json_encode($json);
+                    die;
+                }
+
+                if(!empty($attach_id)){
+                    $attachment_id = $attach_id;
+                }else{
+                    $json['type'] = 'error';
+                    $json['message'] = esc_html__('image not found.', 'docdirect');
+                    echo json_encode($json);
+                    die;
+                }
+
                 $article_tags = !empty($request['article_tags']) ? $request['article_tags'] : array();
                 $article_categories = !empty($request['categories']) ? $request['categories'] : array();
 
