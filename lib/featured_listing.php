@@ -79,10 +79,9 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
                     $postdata = get_post($doc_type_id);
                     $slug 	 = $postdata->post_name;
-                    //$item =  $user;
                     $item['id'] = $user->id;
                     $item['author_url'] = get_author_posts_url($user->ID);
-                    $item['verified'] =  docdirect_get_verified_tag(true,$user->ID,'','v2');
+                    $item['verified']  = get_user_meta($user->ID, 'verify_user', true);
                     $item['img_url'] = $avatar;
                     $item['directory_type'] = $doc_type_id;
                     $item['directory_type_name'] = get_the_title( $doc_type_id );
@@ -92,7 +91,9 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     if( isset( $reviews_switch ) && $reviews_switch === 'enable' ){
                         $item['rating']  =  docdirect_get_rating_stars_v2($review_data,'echo');
                     }
-                    $item['likes']= docdirect_get_likes_button($user->ID);
+                    $item['likes']    = get_user_meta($user->ID,'user_likes', true);
+                    $count_key = 'doc_user_likes_count';
+                    $item['count']     = get_user_meta($user->ID , $count_key , true);
                     $item['address'] = $user->user_address;
                     $item['phone'] = $user->phone_number;
                     $item['fax'] = $user->fax;

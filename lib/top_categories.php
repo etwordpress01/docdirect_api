@@ -14,7 +14,7 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 			register_rest_route($namespace, '/' . $base . '/get_top_categories',
                 array(
                     array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_parent_categories'),
                         'args' => array(),
                     ),
@@ -40,14 +40,11 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 			$items	= array();
             if (!empty($cust_query)) {
                 foreach ($cust_query as $key => $dir) {
-                    $item = array();
-//                    $postdata = get_post($dir->ID);
-//                    $slug 	 = $postdata->post_name;
-                    $item['id'] 	= $dir->ID;
+					$item = array();
+					$item['id'] 	= $dir->ID;
                     $item['title']  = get_the_title($dir->ID);
-                   // $item['slug'] = $slug;
                     $item['url'] = esc_url( get_permalink($dir->ID));
-                    $item['icon'] = fw_get_db_post_option($dir->ID, 'dir_icon');
+					$item['icon'] = fw_get_db_post_option($dir->ID, 'dir_icon');
 
                     $items[] = $item;
                 }
