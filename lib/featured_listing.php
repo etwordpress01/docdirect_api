@@ -70,7 +70,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                 $items	= array();
                 foreach ( $user_query->results as $user ) {
                     $item = array();
-					$featured_all = get_user_meta( $user->ID, '', true);
+					//$featured_all = get_user_meta( $user->ID);
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
@@ -80,7 +80,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
                     $postdata = get_post($doc_type_id);
                     $slug 	 = $postdata->post_name;
-                    $item['id'] = $user->id;
+                    $item['id'] = $user->ID;
                     $item['author_url'] = get_author_posts_url($user->ID);
                     $item['verified']  = get_user_meta($user->ID, 'verify_user', true);
                     $item['img_url'] = $avatar;
@@ -101,7 +101,81 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $item['email'] = $user->user_email;
                     $item['website'] = $user->user_url;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
-					$item['all'] = $featured_all;
+					
+					$meta_list = array( 'user_type' => '',
+					'full_name' => '',
+					'directory_type' => '',
+					'video_url' => '',
+					'user_gallery' => '',
+					'userprofile_media' => '',
+					'facebook' => '',
+					'twitter' => '',
+					'linkedin' => '',
+					'pinterest' => '',
+					'google_plus' => '',
+					'tumblr' => '',
+					'instagram' => '',
+					'skype' => '',
+					'user_address' => '',
+					'contact_form' => '',
+					'profile_status' => '',
+					'tagline' => '',
+					'phone_number' => '',
+					'fax' => '',
+					'languages' => '',
+					'address' => '',
+					'latitude' => '',
+					'longitude' => '',
+					'location' => '',
+					'zip' => '',
+					'verify_user' => '',
+					'privacy' => '',
+					'awards' => '',
+					'education' => '',
+					'experience' => '',
+					'user_profile_specialities' => '',
+					'description' => '',
+					'first_name' => '',
+					'last_name' => '',
+					'nickname' => '',
+					'schedules' => '',
+					'professional_statements' => '',
+					'appointments' => '',
+					'phone' => '',
+					'email' => '',
+					'opening_hours' => '',
+					'prices_list' => '',
+					'user_current_package_expiry' => '',
+					'user_featured' => '',
+					'user_current_package' => '',
+					'userprofile_banner' => '',
+					'paypal_enable' => '',
+					'paypal_email_id' => '',
+					'stripe_enable' => '',
+					'stripe_secret' => '',
+					'stripe_publishable' => '',
+					'stripe_site' => '',
+					'stripe_decimal' => '',
+					'approved_title' => '',
+					'confirmation_title' => '',
+					'cancelled_title' => '',
+					'thank_you' => '',
+					'schedule_message' => '',
+					'booking_approved' => '',
+					'booking_confirmed' => '',
+					'booking_cancelled' => '',
+					'currency_symbol' => '',
+					'currency' => '',
+					'services_cats' => '',
+					'booking_services' => '',
+					'teams_data' => '');
+					
+					foreach( $meta_list as $key => $value ){
+						$data  = get_user_meta($user->ID, $key, true);
+						$item['all'][$key] = maybe_unserialize($data);
+					} 
+					
+					
                     $items[] = $item;
                 }
 
