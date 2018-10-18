@@ -23,6 +23,10 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
         }
 
         /**
+=======
+		
+		/**
+>>>>>>> 4959423bf91749d7eb67f19498cc2c8a07c829ad
          * Get categories
          *
          * @param WP_REST_Request $request Full data about the request.
@@ -34,43 +38,35 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
                 'post_status' => 'publish',
                 'suppress_filters' => false
             );
-
-            $options = '';
+			
+			$options = '';
             $cust_query = get_posts($args);
 			$items	= array();
             if (!empty($cust_query)) {
                 $counter = 0;
                 foreach ($cust_query as $key => $dir) {
                     $meta = get_post_meta($dir->ID);
-                    $item = array();
+					$item = array();
 
                     $item['id'] 	= $dir->ID;
                     $item['title']  = get_the_title($dir->ID);
 
                     $item += unserialize($meta['fw_options'][0]);
+					$specialities = $item['specialities'];
+	
+					if (!empty($specialities)) {
+						$subarray = array();
+                        foreach ($specialities as $key => $term) {
+							$speciality = get_term_by('id',$key,'specialities','OBJECT');
+							$subarray[] = $speciality;
+						}
 
-
-                    /*if (isset($dir->ID)) {
-                        $sub_categories = wp_get_post_terms($dir->ID,
-                                'sub_category', array("fields" => "all"));
-
-                        $subarray = array();
-                        if (!empty($sub_categories)) {
-                            foreach ($sub_categories as $key => $sub_category) {
-                                if (!empty($sub_category)) {
-                                    $sub['slug'] = $sub_category->slug;
-                                    $sub['title'] = htmlspecialchars_decode($sub_category->name);
-                                }
-                                $subarray[] = $sub;
-                            }
-                        }
-
-                        $item['sub_categories'] = $subarray;
-                    }*/
+                        $item['specialities'] = $subarray;
+                    } 
 					
 					$items[] = $item;
                 }
-            }
+			} 
 
             return new WP_REST_Response($items, 200);
         }
