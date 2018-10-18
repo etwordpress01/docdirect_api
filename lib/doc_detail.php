@@ -13,16 +13,34 @@ if (!class_exists('DocdirectAppDocDetailRoutes')) {
 
             register_rest_route($namespace, '/' . $base . '/doc_detail',
                 array(
+					array(
+                        'methods' => WP_REST_Server::READABLE,
+                        'callback' => array(&$this, 'get_items'),
+                        'args' => array(
+                        ),
+                    ),
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array($this, 'get_doc_detail'),
+                        'callback' => array(&$this, 'get_doc_detail'),
                         'args' => array(),
                     ),
                 )
             );
         }
 
-
+		
+		/**
+         * Get a collection of items
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Response
+         */
+        public function get_items($request) {
+            $items['data'] = array();        
+            return new WP_REST_Response($items, 200);
+        }
+		
+		
         /**
          * Get Doctor Detail
          *

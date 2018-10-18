@@ -517,6 +517,7 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
 //                $item['data'] = $postdata;
 
                 foreach ( $user_query->results as $user ){
+					$user_all = get_user_meta( $user->ID, '', true);
                     $latitude	   = get_user_meta( $user->ID, 'latitude', true);
                     $longitude	   = get_user_meta( $user->ID, 'longitude', true);
                     $directory_type = get_user_meta( $user->ID, 'directory_type', true);
@@ -546,6 +547,7 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
                     $item['address']	  = $user->user_address;
                     $item['rating'] = number_format((float)$review_data['average_rating'], 1, '.', '');
                     $item['likes']    = get_user_meta($user->ID,'user_likes', true);
+					$item['all'] = $user_all;
                     $items[] = $item;
                 }
 

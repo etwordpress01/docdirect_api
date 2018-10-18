@@ -14,7 +14,7 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
             register_rest_route($namespace, '/' . $base . '/latest_providers',
                 array(
                   array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_latest_providers'),
                         'args' => array(),
                     ),
@@ -53,13 +53,14 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
                     );
 
                     $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
+					$doc_all = get_user_meta( $user->ID, '', true);
                     //$title = get_the_title($directory_type);
                     $postdata = get_post($doc_type_id);
                     $slug 	 = $postdata->post_name;
                     //$item =  $user;
                     $item['id'] = $user->id;
                     $item['author_url'] = get_author_posts_url($user->ID);
-                    $item['verified'] =  docdirect_get_verified_tag(true,$user->ID,'','v2');
+                    $item['verified']  = get_user_meta($user->ID, 'verify_user', true);
                     $item['img_url'] = $avatar;
                     $item['directory_type'] = $doc_type_id;
                     $item['directory_type_name'] = get_the_title( $doc_type_id );
@@ -67,6 +68,7 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
                     $item['directory_type_url'] = esc_url( get_permalink($doc_type_id));
                     $item['name'] = $user->first_name.' '.$user->last_name;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
+					$item['all'] = $doc_all;
                     $items[] = $item;
                 }
 

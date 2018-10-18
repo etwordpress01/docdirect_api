@@ -39,15 +39,17 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 			$cust_query = get_posts($args);
 			$items	= array();
             if (!empty($cust_query)) {
-                foreach ($cust_query as $key => $dir) {
+				foreach ($cust_query as $key => $dir) {
 					$item = array();
 					$item['id'] 	= $dir->ID;
                     $item['title']  = get_the_title($dir->ID);
                     $item['url'] = esc_url( get_permalink($dir->ID));
 					$item['icon'] = fw_get_db_post_option($dir->ID, 'dir_icon');
+					$item['image'] = fw_get_db_post_option($dir->ID, 'category_image');
 
                     $items[] = $item;
                 }
+				
 			} 
 
             return new WP_REST_Response($items, 200);

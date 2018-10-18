@@ -70,6 +70,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                 $items	= array();
                 foreach ( $user_query->results as $user ) {
                     $item = array();
+					$featured_all = get_user_meta( $user->ID, '', true);
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
@@ -100,6 +101,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                     $item['email'] = $user->user_email;
                     $item['website'] = $user->user_url;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
+					$item['all'] = $featured_all;
                     $items[] = $item;
                 }
 
