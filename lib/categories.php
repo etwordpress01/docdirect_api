@@ -13,30 +13,13 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
 			
 			register_rest_route($namespace, '/' . $base . '/get_categories',
                 array(
-					 array(
-                        'methods' => WP_REST_Server::READABLE,
-                        'callback' => array(&$this, 'get_items'),
-                        'args' => array(
-                        ),
-                    ),
                     array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_all_categories'),
                         'args' => array(),
                     ),
                 )
             );
-        }
-		
-		/**
-         * Get a collection of items
-         *
-         * @param WP_REST_Request $request Full data about the request.
-         * @return WP_Error|WP_REST_Response
-         */
-        public function get_items($request) {
-            $items['data'] = array();        
-            return new WP_REST_Response($items, 200);
         }
 
         /**
