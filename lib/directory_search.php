@@ -2,8 +2,7 @@
 
 if (!class_exists('DocdirectAppDirectorySearchRoute')) {
 
-    class DocdirectAppDirectorySearchRoute extends WP_REST_Controller
-    {
+    class DocdirectAppDirectorySearchRoute extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -16,7 +15,7 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
             register_rest_route($namespace, '/' . $base . '/get_directory',
                     array(
                 array(
-                    'methods' => WP_REST_Server::CREATABLE,
+                    'methods' => WP_REST_Server::READABLE,
                     'callback' => array($this, 'get_directory_result'),
                     'args' => array(
                     ),
@@ -513,39 +512,40 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
                     $slug = '';
                 }
 
-//                $item['title'] = $title;
-//                $item['data'] = $postdata;
-
                 foreach ( $user_query->results as $user ){
                     $latitude	   = get_user_meta( $user->ID, 'latitude', true);
                     $longitude	   = get_user_meta( $user->ID, 'longitude', true);
                     $directory_type = get_user_meta( $user->ID, 'directory_type', true);
-                    $review_data	= docdirect_get_everage_rating ( $user->ID );
+                    
                     $get_username	= docdirect_get_username( $user->ID );
-                    $reviews_switch    = fw_get_db_post_option($directory_type, 'reviews', true);
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
                         array('width'=>270,'height'=>270) //size width,height
                     );
-                    $user_link = get_author_posts_url($user->ID);
+                    $user_link 				= get_author_posts_url($user->ID);
                     $item['username']		= $get_username;
-                    $item['featured']	= get_user_meta( $user->ID, 'user_featured', true);;
-                    $item['verify']	= get_user_meta($user->ID, 'verify_user', true);
-                    $item['image']		= $avatar;
-                    $item['url']		= $user_link;
+                    //$item['featured']	= get_user_meta( $user->ID, 'user_featured', true);;
+                    //$item['verify']	= get_user_meta($user->ID, 'verify_user', true);
+                    $item['avatar']		= $avatar;
+                    $item['profile_url']		= $user_link;
                     $item['directory_type_name'] = get_the_title( $directory_type );
                     $item['directoty_type_slug'] = $slug;
                     $item['directory_type_url'] = esc_url( get_permalink($directory_type));
-                    $item['latitude']	 = $latitude;
+                    
+					/*$item['latitude']	 = $latitude;
                     $item['longitude']	 = $longitude;
                     $item['fax']		 = $user->fax;
                     $item['description']  = $user->description;
                     $item['email']	 	= $user->user_email;
                     $item['phone_number'] = $user->phone_number;
-                    $item['address']	  = $user->user_address;
-                    $item['rating'] = number_format((float)$review_data['average_rating'], 1, '.', '');
+                    $item['address']	  = $user->user_address;*/
+                    
+					$reviews_switch    = fw_get_db_post_option($directory_type, 'reviews', true);
+					$review_data	= docdirect_get_everage_rating ( $user->ID );
+					$item['rating'] = number_format((float)$review_data['average_rating'], 1, '.', '');
                     $item['likes']    = get_user_meta($user->ID,'user_likes', true);
+					
 					$meta_list = array( 'user_type' => '',
 					'full_name' => '',
 					'directory_type' => '',
@@ -611,12 +611,29 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
 					'currency_symbol' => '',
 					'currency' => '',
 					'services_cats' => '',
+					'wishlist' => '',
 					'booking_services' => '',
 					'teams_data' => '');
 					
 					foreach( $meta_list as $key => $value ){
 						$data  = get_user_meta($user->ID, $key, true);
-						$item['all'][$key] = maybe_unserialize($data);
+						if( $key === 'user_gallery' ){
+							$user_gallery = maybe_unserialize($data);
+							$db_user_gallery = array();
+
+							foreach( $user_gallery as $gkey => $value ){
+								$thumbnail = docdirect_get_image_source($gkey, 150, 150);
+								$full = docdirect_get_image_source($gkey, 0, 0);
+								$db_user_gallery[$gkey]['thumb'] = $thumbnail;
+								$db_user_gallery[$gkey]['full'] = $full;
+								$db_user_gallery[$gkey]['id']  = $gkey;
+							}
+							
+							$item[$key]	= $db_user_gallery;
+						}else{
+							$item[$key] = maybe_unserialize($data);
+						}
+						
 					}
 					
                     $items[] = $item;

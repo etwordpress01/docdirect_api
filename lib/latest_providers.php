@@ -69,6 +69,12 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
                     $item['name'] = $user->first_name.' '.$user->last_name;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
 					
+					$reviews_switch     = fw_get_db_post_option($directory_type, 'reviews', true);
+					$review_data		= docdirect_get_everage_rating ( $user->ID );
+					$item['review_data'] 	= $review_data;
+					$item['rating'] 	= number_format((float)$review_data['average_rating'], 1, '.', '');
+                    $item['likes']    	= get_user_meta($user->ID,'user_likes', true);
+					
 					$meta_list = array( 'user_type' => '',
 					'full_name' => '',
 					'directory_type' => '',
@@ -134,12 +140,27 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 					'currency_symbol' => '',
 					'currency' => '',
 					'services_cats' => '',
+					'wishlist' => '',
 					'booking_services' => '',
 					'teams_data' => '');
 					
 					foreach( $meta_list as $key => $value ){
 						$data  = get_user_meta($user->ID, $key, true);
-						$item['all'][$key] = maybe_unserialize($data);
+						if( $key === 'user_gallery' ){
+							$user_gallery = maybe_unserialize($data);
+							$db_user_gallery = array();
+
+							foreach( $user_gallery as $gkey => $value ){
+								$thumbnail = docdirect_get_image_source($gkey, 150, 150);
+								$full = docdirect_get_image_source($gkey, 0, 0);
+								$db_user_gallery[$gkey]['thumb'] = $thumbnail;
+								$db_user_gallery[$gkey]['full'] = $full;
+								$db_user_gallery[$gkey]['id']  = $gkey;
+							}
+							$item['all'][$key]	= array_values( $db_user_gallery );
+						}else{
+							$item['all'][$key] = maybe_unserialize($data);
+						}
 					}
 					
                     $items[] = $item;

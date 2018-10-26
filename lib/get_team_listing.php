@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
+if (!class_exists('DocdirectAppGetTeamsRoutes')) {
 
-    class DocdirectAppFeaturedListingRoutes extends WP_REST_Controller{
+    class DocdirectAppGetTeamsRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -11,10 +11,10 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
             $namespace 	= 'api/v' . $version;
             $base 		= 'listing';
 
-            register_rest_route($namespace, '/' . $base . '/get_featured_listing',
+            register_rest_route($namespace, '/' . $base . '/get_teams',
                 array(
                   array(
-                        'methods' => WP_REST_Server::READABLE,
+                        'methods' => WP_REST_Server::CREATABLE,
                         'callback' => array(&$this, 'get_listing'),
                         'args' => array(),
                     ),
@@ -31,41 +31,26 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
          */
         public function get_listing($request)
         {
-            $today = time();
-            $show_users	= 10;
-            $order		 = 'DESC';
-            $is_verify	= 'on';
+			
+			$id	= $request['id'];
+			if( empty( $id ) ){
+				
+			}
+			
+            $teams    = get_user_meta($id,'teams_data', true);
+			$teams    = !empty($teams) && is_array( $teams ) ? $teams : array();
 
-            $query_args	= array(
-                'role'  => 'professional',
-                'order' => $order,
-                'number' => $show_users
-            );
+			$total_users = (int)count($teams); //Total Users
 
-            //Verify user
-            $meta_query_args[] = array(
-                'key'     => 'verify_user',
-                'value'   => (string)$is_verify,
-                'compare' => '='
-            );
 
-            //featured users
-            $meta_query_args[] = array(
-                'key'     => 'user_featured',
-                'value'   => $today,
-                'type' => 'numeric',
-                'compare' => '>'
-            );
+			$query_args	= array(
+									'role'  => 'professional',
+									'order' => 'DESC',
+									'orderby' => 'ID',
+									'include' => $teams
+								 );
 
-            if( !empty( $meta_query_args ) ) {
-                $query_relation = array('relation' => 'AND',);
-                $meta_query_args	= array_merge( $query_relation,$meta_query_args );
-                $query_args['meta_query'] = $meta_query_args;
-            }
-
-            $query_args['meta_key']	   = 'user_featured';
-            $query_args['orderby']	   = 'meta_value';
-            $user_query  = new WP_User_Query($query_args);
+			$user_query  = new WP_User_Query($query_args);
             if ( ! empty( $user_query->results ) ) {
                 $items	= array();
                 foreach ( $user_query->results as $user ) {
@@ -222,6 +207,6 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectAppFeaturedListingRoutes;
+        $controller = new DocdirectAppGetTeamsRoutes;
         $controller->register_routes();
     });

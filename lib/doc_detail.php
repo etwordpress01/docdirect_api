@@ -133,14 +133,17 @@ if (!class_exists('DocdirectAppDocDetailRoutes')) {
                 }
 
                 $item['description'] = $user_meta['description'];
+				
                 //Get specialities data
                 foreach($user_meta['user_profile_specialities'] as $key => $specialities){
                     $item['user_profile_specialities'] = unserialize($specialities);
                 }
+				
                 //Get prices list
                 foreach($user_meta['prices_list'] as $key => $price){
                     $item['prices_list'] = unserialize($price);
                 }
+				
                 //Get Teams id
                 foreach($user_meta['teams_data'] as $key => $teams){
                     $item['team'] =  unserialize($teams);
@@ -211,12 +214,28 @@ if (!class_exists('DocdirectAppDocDetailRoutes')) {
 				'currency_symbol' => '',
 				'currency' => '',
 				'services_cats' => '',
+				'wishlist' => '',
 				'booking_services' => '',
 				'teams_data' => '');
 
 				foreach( $meta_list as $key => $value ){
 					$data  = get_user_meta($user->ID, $key, true);
-					$item['all'][$key] = maybe_unserialize($data);
+					
+					if( $key === 'user_gallery' ){
+						$user_gallery = maybe_unserialize($data);
+						$db_user_gallery = array();
+
+						foreach( $user_gallery as $gkey => $value ){
+							$thumbnail = docdirect_get_image_source($gkey, 150, 150);
+							$full = docdirect_get_image_source($gkey, 0, 0);
+							$db_user_gallery[$gkey]['thumb'] = $thumbnail;
+							$db_user_gallery[$gkey]['full'] = $full;
+							$db_user_gallery[$gkey]['id']  = $gkey;
+						}
+						$item['all'][$key]	= $db_user_gallery;
+					}else{
+						$item['all'][$key] = maybe_unserialize($data);
+					}
 				}
 				
                 $items[] = $item;

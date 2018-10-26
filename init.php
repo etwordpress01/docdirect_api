@@ -118,6 +118,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_qualification_
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/update_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/delete_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
+require plugin_dir_path( __FILE__ ) . 'lib/get_team_listing.php';
 
 /**
  * Begins execution of the plugin.
