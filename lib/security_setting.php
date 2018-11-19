@@ -31,18 +31,17 @@ if (!class_exists('DocdirectSecuritySettingRoutes')) {
          */
         public function set_security_setting($request)
         {
-            if (!empty($request['user_id']))
-            {
+            if (!empty($request['user_id'])){
                 $user_identity	= $request['user_id'];
                 $json	=  array();
 
                 $user = get_userdata($user_identity); //trace($user);
 
-                if(!empty($request['old_passowrd'])){
-                    $old_passowrd	= sanitize_text_field( $request['old_passowrd'] );
+                if(!empty($request['old_password'])){
+                    $old_passowrd	= sanitize_text_field( $request['old_password'] );
                 }
-                if(!empty($request['new_passowrd'])){
-                    $new_passowrd	= sanitize_text_field( $request['new_passowrd'] );
+                if(!empty($request['new_password'])){
+                    $new_passowrd	= sanitize_text_field( $request['new_password'] );
                 }
                 if(!empty($request['confirm_password'])){
                     $confirm_password	= sanitize_text_field( $request['confirm_password'] );
@@ -59,7 +58,7 @@ if (!class_exists('DocdirectSecuritySettingRoutes')) {
                         exit;
                     }
 
-                    if ( esc_attr( $new_passowrd )  == esc_attr( $confirm_password ) ) {
+                    if ( $new_passowrd  === $confirm_password ) {
                         wp_update_user( array( 'ID' => $user_identity, 'user_pass' => esc_attr( $new_passowrd ) ) );
                         $json['type']		=  'success';
                         $json['message']		= esc_html__('Password Updated.','docdirect');
@@ -67,6 +66,7 @@ if (!class_exists('DocdirectSecuritySettingRoutes')) {
                         $json['type']		=  'error';
                         $json['message']		= esc_html__('The passwords you entered do not match. Your password was not updated', 'docdirect');
                     }
+					
                 } else{
                     $json['type']		=  'error';
                     $json['message']		= esc_html__('Old Password doesn\'t match the existing password', 'docdirect');

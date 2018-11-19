@@ -186,6 +186,7 @@ if (!class_exists('DocdirectAppDocDetailRoutes')) {
 				'last_name' => '',
 				'nickname' => '',
 				'schedules' => '',
+				'time_format' => '',
 				'professional_statements' => '',
 				'appointments' => '',
 				'phone' => '',

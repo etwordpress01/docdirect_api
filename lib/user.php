@@ -318,8 +318,7 @@ if (!class_exists('DocdirectApp_User_Route')) {
 					$dir_longitude = '-0.1262362';
 					$dir_latitude = '51.5001524';
 				}
-				
-				
+
 				$privacy	= array(
 					'appointments'	=> 'on',
 					'phone'			=> 'on',
@@ -355,7 +354,6 @@ if (!class_exists('DocdirectApp_User_Route')) {
 				}
 
 				update_user_meta( $user_identity, 'profile_hits', $profile_hits );
-
 
 				if( class_exists( 'DocDirectProcessEmail' ) ) {
 					$email_helper	= new DocDirectProcessEmail();

@@ -45,8 +45,17 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
                     $item['title']  = get_the_title($dir->ID);
                     $item['url'] = esc_url( get_permalink($dir->ID));
 					$item['icon'] = fw_get_db_post_option($dir->ID, 'dir_icon');
-					$item['image'] = fw_get_db_post_option($dir->ID, 'category_image');
+					$category_image = fw_get_db_post_option($dir->ID, 'category_image', true);
 
+					if( !empty( $category_image['attachment_id'] ) ){
+						$banner	= docdirect_get_image_source($category_image['attachment_id'],100,100);
+					} else{
+						$banner	= get_template_directory_uri().'/images/user100x100.jpg';;
+					}
+					
+					$item['placeholder'] = get_template_directory_uri().'/images/user100x100.jpg';
+					$item['image'] = $banner;
+					
                     $items[] = $item;
                 }
 				

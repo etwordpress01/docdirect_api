@@ -119,6 +119,8 @@ require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/update_service_cate
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/delete_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
 require plugin_dir_path( __FILE__ ) . 'lib/get_team_listing.php';
+require plugin_dir_path( __FILE__ ) . 'lib/get_providers.php';
+require plugin_dir_path( __FILE__ ) . 'lib/get_filters.php';
 
 /**
  * Begins execution of the plugin.

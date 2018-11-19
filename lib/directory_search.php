@@ -494,9 +494,10 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
                 }
 
 
-            $user_query  = new WP_User_Query($query_args);
-            $direction	= docdirect_get_location_lat_long();
+            $user_query  	= new WP_User_Query($query_args);
+            $direction	 	= docdirect_get_location_lat_long();
             $directories	=  array();
+			
             $directories['status']	= 'none';
             $directories['lat']  = floatval ( $direction['lat'] );
             $directories['long'] = floatval ( $direction['long'] );
@@ -513,110 +514,117 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
                 }
 
                 foreach ( $user_query->results as $user ){
-                    $latitude	   = get_user_meta( $user->ID, 'latitude', true);
-                    $longitude	   = get_user_meta( $user->ID, 'longitude', true);
-                    $directory_type = get_user_meta( $user->ID, 'directory_type', true);
-                    
-                    $get_username	= docdirect_get_username( $user->ID );
+                    $item = array();
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
                         array('width'=>270,'height'=>270) //size width,height
                     );
-                    $user_link 				= get_author_posts_url($user->ID);
-                    $item['username']		= $get_username;
-                    //$item['featured']	= get_user_meta( $user->ID, 'user_featured', true);;
-                    //$item['verify']	= get_user_meta($user->ID, 'verify_user', true);
-                    $item['avatar']		= $avatar;
-                    $item['profile_url']		= $user_link;
-                    $item['directory_type_name'] = get_the_title( $directory_type );
+					
+                    $review_data	= docdirect_get_everage_rating ( $user->ID );
+                    $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
+                    $postdata = get_post($doc_type_id);
+                    $slug 	 = $postdata->post_name;
+                    $item['id'] = $user->ID;
+                    $item['author_url'] = get_author_posts_url($user->ID);
+                    $item['verified']  = get_user_meta($user->ID, 'verify_user', true);
+                    $item['img_url'] = $avatar;
+                    $item['directory_type'] = $doc_type_id;
+                    $item['directory_type_name'] = get_the_title( $doc_type_id );
                     $item['directoty_type_slug'] = $slug;
-                    $item['directory_type_url'] = esc_url( get_permalink($directory_type));
-                    
-					/*$item['latitude']	 = $latitude;
-                    $item['longitude']	 = $longitude;
-                    $item['fax']		 = $user->fax;
-                    $item['description']  = $user->description;
-                    $item['email']	 	= $user->user_email;
-                    $item['phone_number'] = $user->phone_number;
-                    $item['address']	  = $user->user_address;*/
-                    
-					$reviews_switch    = fw_get_db_post_option($directory_type, 'reviews', true);
-					$review_data	= docdirect_get_everage_rating ( $user->ID );
-					$item['rating'] = number_format((float)$review_data['average_rating'], 1, '.', '');
-                    $item['likes']    = get_user_meta($user->ID,'user_likes', true);
+                    $item['directory_type_url'] = esc_url( get_permalink($doc_type_id));
+                    $item['name'] = $user->first_name.' '.$user->last_name;
+                    if( isset( $reviews_switch ) && $reviews_switch === 'enable' ){
+                        $item['rating']  =  docdirect_get_rating_stars_v2($review_data,'echo');
+                    }
+					
+                    $item['address'] = $user->user_address;
+                    $item['phone'] = $user->phone_number;
+                    $item['fax'] = $user->fax;
+                    $item['email'] = $user->user_email;
+                    $item['website'] = $user->user_url;
+                    $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
+					
+					$reviews_switch     = fw_get_db_post_option($directory_type, 'reviews', true);
+					$review_data		= docdirect_get_everage_rating ( $user->ID );
+					$item['review_data'] 	= $review_data;
+					$item['rating'] 	= number_format((float)$review_data['average_rating'], 1, '.', '');
+                    $item['likes']    	= get_user_meta($user->ID,'doc_user_likes_count', true);
 					
 					$meta_list = array( 'user_type' => '',
-					'full_name' => '',
-					'directory_type' => '',
-					'video_url' => '',
-					'user_gallery' => '',
-					'userprofile_media' => '',
-					'facebook' => '',
-					'twitter' => '',
-					'linkedin' => '',
-					'pinterest' => '',
-					'google_plus' => '',
-					'tumblr' => '',
-					'instagram' => '',
-					'skype' => '',
-					'user_address' => '',
-					'contact_form' => '',
-					'profile_status' => '',
-					'tagline' => '',
-					'phone_number' => '',
-					'fax' => '',
-					'languages' => '',
-					'address' => '',
-					'latitude' => '',
-					'longitude' => '',
-					'location' => '',
-					'zip' => '',
-					'verify_user' => '',
-					'privacy' => '',
-					'awards' => '',
-					'education' => '',
-					'experience' => '',
-					'user_profile_specialities' => '',
-					'description' => '',
-					'first_name' => '',
-					'last_name' => '',
-					'nickname' => '',
-					'schedules' => '',
-					'professional_statements' => '',
-					'appointments' => '',
-					'phone' => '',
-					'email' => '',
-					'opening_hours' => '',
-					'prices_list' => '',
-					'user_current_package_expiry' => '',
-					'user_featured' => '',
-					'user_current_package' => '',
-					'userprofile_banner' => '',
-					'paypal_enable' => '',
-					'paypal_email_id' => '',
-					'stripe_enable' => '',
-					'stripe_secret' => '',
-					'stripe_publishable' => '',
-					'stripe_site' => '',
-					'stripe_decimal' => '',
-					'approved_title' => '',
-					'confirmation_title' => '',
-					'cancelled_title' => '',
-					'thank_you' => '',
-					'schedule_message' => '',
-					'booking_approved' => '',
-					'booking_confirmed' => '',
-					'booking_cancelled' => '',
-					'currency_symbol' => '',
-					'currency' => '',
-					'services_cats' => '',
-					'wishlist' => '',
-					'booking_services' => '',
-					'teams_data' => '');
+						'full_name' => '',
+						'directory_type' => '',
+						'video_url' => '',
+						'user_gallery' => '',
+						'userprofile_media' => '',
+						'facebook' => '',
+						'twitter' => '',
+						'linkedin' => '',
+						'pinterest' => '',
+						'google_plus' => '',
+						'tumblr' => '',
+						'instagram' => '',
+						'skype' => '',
+						'user_address' => '',
+						'contact_form' => '',
+						'profile_status' => '',
+						'tagline' => '',
+						'phone_number' => '',
+						'fax' => '',
+						'languages' => '',
+						'address' => '',
+						'latitude' => '',
+						'longitude' => '',
+						'location' => '',
+						'zip' => '',
+						'verify_user' => '',
+						'privacy' => '',
+						'awards' => '',
+						'education' => '',
+						'experience' => '',
+						'user_profile_specialities' => '',
+						'description' => '',
+						'first_name' => '',
+						'last_name' => '',
+						'nickname' => '',
+						'schedules' => '',
+						'time_format' => '',
+						'professional_statements' => '',
+						'appointments' => '',
+						'phone' => '',
+						'email' => '',
+						'opening_hours' => '',
+						'prices_list' => '',
+						'user_current_package_expiry' => '',
+						'user_featured' => '',
+						'user_current_package' => '',
+						'userprofile_banner' => '',
+						'paypal_enable' => '',
+						'paypal_email_id' => '',
+						'stripe_enable' => '',
+						'stripe_secret' => '',
+						'stripe_publishable' => '',
+						'stripe_site' => '',
+						'stripe_decimal' => '',
+						'approved_title' => '',
+						'confirmation_title' => '',
+						'cancelled_title' => '',
+						'thank_you' => '',
+						'schedule_message' => '',
+						'booking_approved' => '',
+						'booking_confirmed' => '',
+						'booking_cancelled' => '',
+						'currency_symbol' => '',
+						'currency' => '',
+						'services_cats' => '',
+						'wishlist' => '',
+						'booking_services' => '',
+						'teams_data' => ''
+					);
 					
 					foreach( $meta_list as $key => $value ){
 						$data  = get_user_meta($user->ID, $key, true);
+
 						if( $key === 'user_gallery' ){
 							$user_gallery = maybe_unserialize($data);
 							$db_user_gallery = array();
@@ -628,21 +636,29 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
 								$db_user_gallery[$gkey]['full'] = $full;
 								$db_user_gallery[$gkey]['id']  = $gkey;
 							}
+							$item['all'][$key]	= array_values( $db_user_gallery );
 							
-							$item[$key]	= $db_user_gallery;
+						}elseif( $key === 'languages' ){
+							$languages	= docdirect_prepare_languages();
+							$db_languages = maybe_unserialize($data);
+							$db_user_languages = array();
+							foreach( $db_languages as $lkey => $value ){
+								$db_user_languages[$lkey]  = $languages[$lkey];
+							}
+							
+							$item['all'][$key]	= array_values( $db_user_languages );
+							
+						}elseif( $key === 'user_profile_specialities' ){
+							$item['all'][$key]	= array_values( $data );
 						}else{
-							$item[$key] = maybe_unserialize($data);
+							$item['all'][$key] = maybe_unserialize($data);
 						}
-						
-					}
+					} 
+					
 					
                     $items[] = $item;
                 }
-
-                //$items[] = $item;
-
             }
-
 
             return new WP_REST_Response($items, 200);
         }

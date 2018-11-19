@@ -29,8 +29,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function get_listing($request)
-        {
+        public function get_listing($request){
             $today = time();
             $show_users	= 10;
             $order		 = 'DESC';
@@ -70,8 +69,6 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
                 $items	= array();
                 foreach ( $user_query->results as $user ) {
                     $item = array();
-					
-					//$featured_all = get_user_meta( $user->ID);
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
@@ -145,6 +142,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 						'last_name' => '',
 						'nickname' => '',
 						'schedules' => '',
+						'time_format' => '',
 						'professional_statements' => '',
 						'appointments' => '',
 						'phone' => '',
@@ -193,6 +191,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 								$db_user_gallery[$gkey]['id']  = $gkey;
 							}
 							$item['all'][$key]	= array_values( $db_user_gallery );
+							
 						}elseif( $key === 'languages' ){
 							$languages	= docdirect_prepare_languages();
 							$db_languages = maybe_unserialize($data);
@@ -203,6 +202,8 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 							
 							$item['all'][$key]	= array_values( $db_user_languages );
 							
+						}elseif( $key === 'user_profile_specialities' ){
+							$item['all'][$key]	= array_values( $data );
 						}else{
 							$item['all'][$key] = maybe_unserialize($data);
 						}
@@ -221,7 +222,7 @@ if (!class_exists('DocdirectAppFeaturedListingRoutes')) {
 }
 
 add_action('rest_api_init',
-    function () {
-        $controller = new DocdirectAppFeaturedListingRoutes;
-        $controller->register_routes();
-    });
+function () {
+	$controller = new DocdirectAppFeaturedListingRoutes;
+	$controller->register_routes();
+});

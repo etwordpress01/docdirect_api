@@ -29,12 +29,9 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function submit_review($request)
-        {
-            if (!empty($request['user_to']) && !empty($request['current_user']))
-            {
+        public function submit_review($request){
+            if (!empty($request['user_to']) && !empty($request['current_user'])){
                 $current_user_id = $request['current_user'];
-                do_action('docdirect_is_action_allow'); //is action allow
 
                 $user_to	  = sanitize_text_field( $request['user_to'] );
                 $is_verified  = get_user_meta($request['current_user'], 'verify_user', true);
@@ -45,20 +42,11 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                     $dir_review_status = fw_get_db_settings_option('dir_review_status', $default_value = null);
                 }
 
-                if( apply_filters('docdirect_is_user_logged_in','check_user') === false ){
-                    $json['type']	= 'error';
-                    $json['message']	= esc_html__('Please login first to add review.','docdirect');
-                    echo json_encode($json);
-                    die;
-                }
-
                 if( isset( $is_verified ) && $is_verified != 'on' ) {
-                    $json['type']	= 'error';
-                    $json['message']	= esc_html__('You are not a verified user, You can\'t make a review. Please contact to administrator.','docdirect');
-                    echo json_encode($json);
-                    die;
+                    $json['type']			= 'error';
+                    $json['message']		= esc_html__('You are not a verified user, You can\'t make a review. Please contact to administrator.','docdirect');
+                    return new WP_REST_Response($json, 200);
                 }
-
 
                 $user_reviews = array(
                     'posts_per_page'   => "-1",
@@ -77,8 +65,7 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                 if( isset( $reviews_count ) && $reviews_count > 0 ){
                     $json['type']		= 'error';
                     $json['message']	= esc_html__('You have already submit a review.', 'docdirect');
-                    echo json_encode($json);
-                    die();
+                    return new WP_REST_Response($json, 200);
                 }
 
                 $db_directory_type	 = get_user_meta( $user_to, 'directory_type', true);
@@ -127,8 +114,6 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                     }
 
                     $json['type']	   = 'success';
-
-
                     if( isset( $dir_review_status ) && $dir_review_status == 'publish' ) {
                         $json['message']	= esc_html__('Your review published successfully.','docdirect');
                         $json['html']	   = 'refresh';
@@ -138,28 +123,19 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                     }
 
                     if( class_exists( 'DocDirectProcessEmail' ) ) {
-                        $user_from_data	= get_userdata($user_from);
-                        $user_to_data	  = get_userdata($user_to);
-                        $email_helper	  = new DocDirectProcessEmail();
+                        $user_from_data		= get_userdata($user_from);
+                        $user_to_data	  	= get_userdata($user_to);
+                        $email_helper	  	= new DocDirectProcessEmail();
 
                         $emailData	= array();
 
                         //User to data
                         $emailData['email_to']	    = $user_to_data->user_email;
-                        $emailData['link_to']	= get_author_posts_url($user_to_data->ID);
-                        if( !empty( $user_to_data->display_name ) ) {
-                            $emailData['username_to']	   = $user_to_data->display_name;
-                        } elseif( !empty( $user_to_data->first_name ) || $user_to_data->last_name ) {
-                            $emailData['username_to']	   = $user_to_data->first_name.' '.$user_to_data->last_name;
-                        }
-
+                        $emailData['link_to']		= get_author_posts_url($user_to_data->ID);
+						$emailData['username_to']   = docdirect_get_username($user_to_data->ID);
+                        
                         //User from data
-                        if( !empty( $user_from_data->display_name ) ) {
-                            $emailData['username_from']	   = $user_from_data->display_name;
-                        } elseif( !empty( $user_from_data->first_name ) || $user_from_data->last_name ) {
-                            $emailData['username_from']	   = $user_from_data->first_name.' '.$user_from_data->last_name;
-                        }
-
+						$emailData['username_from']   = docdirect_get_username($user_to_data->ID);
                         $emailData['link_from']	= get_author_posts_url($user_from_data->ID);
 
                         //General
@@ -169,14 +145,12 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                         $email_helper->process_rating_email($emailData);
                     }
 
-                    echo json_encode($json);
-                    die;
+                   return new WP_REST_Response($json, 200);
 
                 } else{
                     $json['type']		= 'error';
                     $json['message']	 = esc_html__('Please fill all the fields.','docdirect');
-                    echo json_encode($json);
-                    die;
+                    return new WP_REST_Response($json, 200);
                 }
             }
         }

@@ -21,12 +21,7 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
                 )
             );
         }
-
-        /**
-=======
-		
 		/**
->>>>>>> 4959423bf91749d7eb67f19498cc2c8a07c829ad
          * Get categories
          *
          * @param WP_REST_Request $request Full data about the request.
@@ -51,16 +46,25 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
                     $item['id'] 	= $dir->ID;
                     $item['title']  = get_the_title($dir->ID);
 
-                    $item += unserialize($meta['fw_options'][0]);
-					$specialities = $item['specialities'];
-	
+                    $item 		 	+= unserialize($meta['fw_options'][0]);
+					$specialities 	= $item['specialities'];
+					$category_image = fw_get_db_post_option($dir->ID, 'category_image', true);
+
+					if( !empty( $category_image['attachment_id'] ) ){
+						$banner	= docdirect_get_image_source($category_image['attachment_id'],100,100);
+					} else{
+						$banner	= get_template_directory_uri().'/images/user100x100.jpg';;
+					}
+					
+					$item['banner'] = $banner;
+					
 					if (!empty($specialities)) {
 						$subarray = array();
                         foreach ($specialities as $key => $term) {
 							$speciality = get_term_by('id',$key,'specialities','OBJECT');
 							$subarray[] = $speciality;
 						}
-
+						
                         $item['specialities'] = $subarray;
                     } 
 					

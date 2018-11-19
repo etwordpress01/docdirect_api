@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
+if (!class_exists('DocdirectAppFavoriteListingRoutes')) {
 
-    class DocdirectAppLatestProvidersRoutes extends WP_REST_Controller{
+    class DocdirectAppFavoriteListingRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -9,13 +9,13 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
         public function register_routes() {
             $version 	= '1';
             $namespace 	= 'api/v' . $version;
-            $base 		= 'providers';
+            $base 		= 'listing';
 
-            register_rest_route($namespace, '/' . $base . '/latest_providers',
+            register_rest_route($namespace, '/' . $base . '/get_favorite_listing',
                 array(
                   array(
                         'methods' => WP_REST_Server::READABLE,
-                        'callback' => array(&$this, 'get_latest_providers'),
+                        'callback' => array(&$this, 'get_listing'),
                         'args' => array(),
                     ),
                 )
@@ -24,27 +24,56 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 
 
         /**
-         * Get Latest Providers
+         * Get favorite Listing
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function get_latest_providers($request){
-            $show_users	= 10;
-            $order		 = 'DESC';
+        public function get_listing($request){
+			$items	= array();
+			$user_id	= $request['user_id'];
+			$offset		= $request['offset'];
+			
+			if( empty( $user_id ) ){
+				$items['type']	= 'error';
+				$items['message']	= esc_html__('Please provide user id.','docdirect_api');
+				return new WP_REST_Response($items, 200);
+			}
+			
+            $wishlist    	 = get_user_meta($user_id,'wishlist', true);
+			$wishlist    	 = !empty($wishlist) && is_array( $wishlist ) ? $wishlist : array();
+			
+			if( empty( $wishlist ) ){
+				$items['type']	= 'error';
+				$items['message']	= esc_html__('No user is added in the favorite listing.','docdirect_api');
+				return new WP_REST_Response($items, 200);
+			}
+			
+            $today 			= time();
+            $dir_search_pagination = fw_get_db_settings_option('dir_search_pagination');
+			$per_page		= !empty( $dir_search_pagination ) ? $dir_search_pagination : get_option('posts_per_page');
+			$limit 			= (int)$per_page;
+			$offset 		= 0;
+			
+            $order		 	= 'DESC';
+            $is_verify		= 'on';
 
             $query_args	= array(
-                'role'  => 'professional',
-                'order' => $order,
-                'number' => $show_users
+                'role'  	=> 'professional',
+                'order' 	=> $order,
+				'include' 	=> $wishlist
             );
+			
+			$query_args['number']	= $limit;
+			$query_args['offset']	= $offset;
 
-            $query_args['orderby']	   = 'ID';
             $user_query  = new WP_User_Query($query_args);
+			
             if ( ! empty( $user_query->results ) ) {
-                $items	= array();
                 foreach ( $user_query->results as $user ) {
                     $item = array();
+					
+					//$featured_all = get_user_meta( $user->ID);
                     $avatar = apply_filters(
                         'docdirect_get_user_avatar_filter',
                         docdirect_get_user_avatar(array('width'=>270,'height'=>270), $user->ID),
@@ -80,6 +109,7 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 					$item['review_data'] 	= $review_data;
 					$item['rating'] 	= number_format((float)$review_data['average_rating'], 1, '.', '');
                     $item['likes']    	= get_user_meta($user->ID,'doc_user_likes_count', true);
+					$item['is_favorite'] 		= 'true';
 					
 					$meta_list = array( 'user_type' => '',
 						'full_name' => '',
@@ -167,7 +197,6 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 								$db_user_gallery[$gkey]['id']  = $gkey;
 							}
 							$item['all'][$key]	= array_values( $db_user_gallery );
-							
 						}elseif( $key === 'languages' ){
 							$languages	= docdirect_prepare_languages();
 							$db_languages = maybe_unserialize($data);
@@ -178,8 +207,6 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 							
 							$item['all'][$key]	= array_values( $db_user_languages );
 							
-						}elseif( $key === 'user_profile_specialities' ){
-							$item['all'][$key]	= array_values( $data );
 						}else{
 							$item['all'][$key] = maybe_unserialize($data);
 						}
@@ -193,11 +220,12 @@ if (!class_exists('DocdirectAppLatestProvidersRoutes')) {
 
             return new WP_REST_Response($items, 200);
         }
+
     }
 }
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectAppLatestProvidersRoutes;
+        $controller = new DocdirectAppFavoriteListingRoutes;
         $controller->register_routes();
     });
