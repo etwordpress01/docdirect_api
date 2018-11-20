@@ -28,6 +28,16 @@ if (!class_exists('DocdirectApp_User_Route')) {
                 )
             );
 			
+			//user login
+            register_rest_route($namespace, '/' . $base . '/do_logout',
+                array(                 
+                    array(
+                        'methods' => WP_REST_Server::CREATABLE,
+                        'callback' => array(&$this, 'do_logout'),
+                        'args' => array(),
+                    ),
+                )
+            );
 			
 			//signup
 			register_rest_route($namespace, '/' . $base . '/do_signup',
@@ -208,6 +218,30 @@ if (!class_exists('DocdirectApp_User_Route')) {
         }
 		
 		 /**
+         * Logout user from the application
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Request
+         */
+        public function do_logout($request) {
+			
+        	if (!empty( $request['user_id'] ) ) {               						
+        		$user_id = $request['user_id'];
+				$sessions = WP_Session_Tokens::get_instance($user_id);
+				// we have got the sessions, destroy them all!
+				$sessions->destroy_all();
+
+                $json['type'] = "success";
+                $json['message'] = esc_html__('You are logged out successfully', 'docdirect_api');               
+                return new WP_REST_Response($json, 200);
+            } 
+            $json['type'] = "error";
+            $json['message'] = esc_html__('User ID needed', 'docdirect_api');               
+            return new WP_REST_Response($json, 200);               
+        }
+        
+
+		/**
          * Signup user for application
          *
          * @param WP_REST_Request $request Full data about the request.

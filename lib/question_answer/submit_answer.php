@@ -40,44 +40,39 @@ if (!class_exists('DocdirectAppSubmitAnswerRoutes')) {
                    docdirect_is_demo_site() ;
                }; //if demo site then prevent
 
-               do_action('docdirect_is_action_allow'); //is action allow
-
-               $offset = get_option('gmt_offset') * intval(60) * intval(60);
+               do_action('docdirect_is_action_allow'); //is action allow               
 
                if (empty($request['answer_description'])) {
-                   $json['type'] = 'error';
-                   $json['message'] = esc_html__('Answers description area should not be empty.', 'docdirect');
-                   echo json_encode($json);
-                   die;
+                  $json['type']     = 'error';
+                  $json['message']  = esc_html__('Answer description area should not be empty.', 'docdirect');
+                  return new WP_REST_Response($json, 200);
                }
 
-               $answer_detail = force_balance_tags($request['answer_description']);
+              $answer_detail = force_balance_tags($request['answer_description']);
+              $question_id   = !empty( $request['question_id'] ) ? intval( $request['question_id'] ) : '';
 
-               $question_id = !empty($request['question_id']) ? intval($request['question_id']) : '';
+              if ( empty( $question_id ) ) {
+                  $json['type']     = 'error';
+                  $json['message']  = esc_html__('Question ID must not be empty.', 'docdirect');
+                  return new WP_REST_Response($json, 200);
+              }
 
-               if (empty($question_id)) {
-                   $json['type'] = 'error';
-                   $json['message'] = esc_html__('Question ID must not be empty.', 'docdirect');
-                   echo json_encode($json);
-                   die;
-               }
+              $questions_answers_post = array(
+                 'post_title' 	=> '',
+                 'post_status' 	=> 'publish',
+                 'post_content' 	=> $answer_detail,
+                 'post_author' 	=> $current_user,
+                 'post_type' 	=> 'sp_answers',
+                 'post_parent'	=> $question_id,
+                 'post_date' 	=> current_time('Y-m-d H:i:s')
+              );
 
-               $questions_answers_post = array(
-                   'post_title' 	=> '',
-                   'post_status' 	=> 'publish',
-                   'post_content' 	=> $answer_detail,
-                   'post_author' 	=> $current_user,
-                   'post_type' 	=> 'sp_answers',
-                   'post_parent'	=> $question_id,
-                   'post_date' 	=> current_time('Y-m-d H:i:s')
-               );
+              $post_id = wp_insert_post($questions_answers_post);
 
-               $post_id = wp_insert_post($questions_answers_post);
+              update_post_meta($post_id, 'answer_question_id', $question_id);
+              update_post_meta($post_id, 'answer_user_id', $current_user);
 
-               update_post_meta($post_id, 'answer_question_id', $question_id);
-               update_post_meta($post_id, 'answer_user_id', $current_user);
-
-               if (class_exists('DocDirectProcessEmail')) {
+              if (class_exists('DocDirectProcessEmail')) {
                    $email_helper = new DocDirectProcessEmail();
                    $emailData	= array();
                    $question_author = get_post_meta($question_id, 'question_by', true);
@@ -90,19 +85,16 @@ if (!class_exists('DocdirectAppSubmitAnswerRoutes')) {
                    if (method_exists($email_helper, 'process_answer_email')){
                        $email_helper->process_answer_email($emailData);
                    }
-               }
+              }
 
-
-               $json['type'] = 'success';
+              $json['type']     = 'success';
                $json['message'] = esc_html__('Answer submitted successfully.', 'docdirect');
-               echo json_encode($json);
-               die;
+               return new WP_REST_Response($json, 200);
            }
            else{
-               $json['type'] = 'error';
+               $json['type']    = 'error';
                $json['message'] = esc_html__('current_user id must not be empty', 'docdirect');
-               echo json_encode($json);
-               die;
+               return new WP_REST_Response($json, 200);
             }
         }
 

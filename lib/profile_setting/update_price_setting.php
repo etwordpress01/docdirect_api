@@ -38,38 +38,44 @@ if (!class_exists('DocdirectUpdatePriceSettingRoutes')) {
             {
 
                 $user_identity = $request['user_id'];
+                $user_data = get_user_meta($user_identity, 'prices_list', true);
+                $user_data = !empty( $user_data ) ? $user_data : array();
 
-                //Prices
-                $prices = array();
-                if (!empty($request['prices'])) {
-                    $counter = 0;
-                    foreach ($request['prices'] as $key => $value) {
-                        if (!empty($value['title'])) {
-                            $prices[$counter]['title'] = esc_attr($value['title']);
-                            $prices[$counter]['price'] = esc_attr($value['price']);
-                            $prices[$counter]['description'] = esc_attr($value['description']);
-                            $counter++;
-                        }
-                    }
-                    $json['prices_list'] = $prices;
+                //Form Validation
+                if( empty( $request['title'] ) 
+                    || empty( $request['price'] )                                   
+                    || empty( $request['description'] ) ) {
+
+                    $json['type'] = 'error';
+                    $json['message'] = esc_html__('All fields are required', 'docdirect');
+                    return new WP_REST_Response($json, 200);  
                 }
 
-                update_user_meta($user_identity, 'prices_list', $prices);
+                //Prices
+                $prices = array(
+                    'title'         => $request['title'],
+                    'price'         => $request['price'],
+                    'description'   => $request['description']
+                );
 
-                do_action('docdirect_do_update_profile_settings', $_POST); //Save custom data
+                $user_data[] = $prices;               
+                update_user_meta($user_identity, 'prices_list', $user_data);
+                
                 $json['type'] = 'success';
                 $json['message'] = esc_html__('Settings saved.', 'docdirect');
-                echo json_encode($json);
-                die;
-
+                return new WP_REST_Response($json, 200);
             }
+
+            $json['type']       = 'error';
+            $json['message']    = esc_html__('user_id Needed.', 'docdirect');
+            return new WP_REST_Response($json, 200); 
         }
     }
 }
 
 add_action('rest_api_init',
-    function ()
-    {
-        $controller = new DocdirectUpdatePriceSettingRoutes;
-        $controller->register_routes();
-    });
+function ()
+{
+    $controller = new DocdirectUpdatePriceSettingRoutes;
+    $controller->register_routes();
+});

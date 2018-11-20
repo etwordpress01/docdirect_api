@@ -24,7 +24,6 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
             );
         }
 
-
         /**
          * Make Reviews Request
          *
@@ -41,19 +40,18 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
                 //Update Basics
                 if (!empty($request['basics'])) {
                     foreach ($request['basics'] as $key => $value) {
-                        update_user_meta($user_identity, $key, esc_attr($value));
+                        update_user_meta($user_identity, $key, esc_attr( $value ) );
                     }
-                }
-
-                update_user_meta($user_identity, 'show_admin_bar_front', false);
-
-                do_action('docdirect_do_update_profile_settings', $_POST); //Save custom data
+                }                
+                
                 $json['type'] = 'success';
                 $json['message'] = esc_html__('Settings saved.', 'docdirect');
-                echo json_encode($json);
-                die;
-
+                return new WP_REST_Response($json, 200); 
             }
+
+            $json['type']       = 'error';
+            $json['message']    = esc_html__('user_id Needed.', 'docdirect');
+            return new WP_REST_Response($json, 200); 
         }
     }
 }

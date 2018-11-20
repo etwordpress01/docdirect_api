@@ -38,19 +38,27 @@ if (!class_exists('DocdirectUpdateSocialSettingRoutes')) {
             {
 
                 $user_identity = $request['user_id'];
-                //Update Socials
-                if (isset($request['socials']) && !empty($request['socials'])) {
-                    foreach ( $request['socials'] as $key => $value ) {
-                        update_user_meta($user_identity, $key, esc_attr($value));
-                    }
+
+                //Form Validation
+                if( empty( $request['name'] ) || empty( $request['url'] ) ){
+                    $json['type'] = 'error';
+                    $json['message'] = esc_html__('Name and URL needed', 'docdirect');
+                    return new WP_REST_Response($json, 200);
                 }
-                do_action('docdirect_do_update_profile_settings', $_POST); //Save custom data
+
+                //Social data
+                $key   = $request['name'];
+                $value = $request['url'];
+               
+                update_user_meta( $user_identity, $key, esc_url( $value ) );               
                 $json['type'] = 'success';
                 $json['message'] = esc_html__('Settings saved.', 'docdirect');
-                echo json_encode($json);
-                die;
-
+                return new WP_REST_Response($json, 200); 
             }
+
+            $json['type']       = 'error';
+            $json['message']    = esc_html__('user_id Needed.', 'docdirect');
+            return new WP_REST_Response($json, 200); 
         }
     }
 }

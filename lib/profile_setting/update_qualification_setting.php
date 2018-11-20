@@ -38,41 +38,49 @@ if (!class_exists('DocdirectUpdateQualificationSettingRoutes')) {
             {
 
                 $user_identity = $request['user_id'];
+                $user_data = get_user_meta($user_identity, 'education', true);
+                $user_data = !empty( $user_data ) ? $user_data : array();
+        
+                //Form validation    
+                if( empty( $request['title'] ) || 
+                    empty( $request['institute'] ) || 
+                    empty( $request['start_date'] ) || 
+                    empty( $request['end_date'] ) || 
+                    empty( $request['description'] ) ){
 
-                //Education
-                $educations = array();
-                if (!empty($request['education'])) {
-                    $counter = 0;
-                    foreach ($request['education'] as $key => $value) {
-                        if (!empty($value['title']) && !empty($value['institute'])) {
-                            $educations[$counter]['title'] = esc_attr($value['title']);
-                            $educations[$counter]['institute'] = esc_attr($value['institute']);
-                            $educations[$counter]['start_date'] = esc_attr($value['start_date']);
-                            $educations[$counter]['end_date'] = esc_attr($value['end_date']);
-                            $educations[$counter]['start_date_formated'] = date_i18n('M,Y', strtotime(esc_attr($value['start_date'])));
-                            $educations[$counter]['end_date_formated'] = date_i18n('M,Y', strtotime(esc_attr($value['end_date'])));
-                            $educations[$counter]['description'] = esc_attr($value['description']);
-                            $counter++;
-                        }
-                    }
-                    $json['education'] = $educations;
+                    $json['type']       = 'error';
+                    $json['message']    = esc_html__('Kindly fill all fields', 'docdirect');
+                    return new WP_REST_Response($json, 200);
                 }
-                update_user_meta($user_identity, 'education', $educations);
 
-                do_action('docdirect_do_update_profile_settings', $_POST); //Save custom data
+                //Education 
+                $education = array(
+                    'title'                 => $request['title'],
+                    'institute'             => $request['institute'],
+                    'start_date'            => $request['start_date'],
+                    'end_date'              => $request['end_date'],
+                    'start_date_formated'   => date_i18n('M,Y', strtotime(esc_attr($request['start_date']))),
+                    'end_date_formated'     => date_i18n('M,Y', strtotime(esc_attr($request['end_date']))),                    
+                    'description'           => $request['description'],
+                );
+
+                $user_data[] = $education;
+                update_user_meta($user_identity, 'education', $user_data);   
+
                 $json['type'] = 'success';
                 $json['message'] = esc_html__('Settings saved.', 'docdirect');
-                echo json_encode($json);
-                die;
-
+                return new WP_REST_Response($json, 200);                
             }
+            $json['type'] = 'error';
+            $json['message'] = esc_html__('user_id Needed', 'docdirect');
+            return new WP_REST_Response($json, 200);
         }
     }
 }
 
 add_action('rest_api_init',
-    function ()
-    {
-        $controller = new DocdirectUpdateQualificationSettingRoutes;
-        $controller->register_routes();
-    });
+function ()
+{
+    $controller = new DocdirectUpdateQualificationSettingRoutes;
+    $controller->register_routes();
+});
