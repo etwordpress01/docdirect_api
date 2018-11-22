@@ -34,7 +34,7 @@ if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
             if (!empty($request['user_id'])) {
                 $user_identity	= $request['user_id'];
                 $json	= array();
-                if(!empty($request['privacy'])){
+                if( !empty( $request['privacy'] ) ){
                     update_user_meta( $user_identity, 'privacy', docdirect_sanitize_array( $request['privacy'] ) );
                 }
 
@@ -47,17 +47,20 @@ if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
 
                 $json['type']	= 'success';
                 $json['message']	= esc_html__('Privacy Settings Updated.','docdirect');
-                echo json_encode($json);
-                die;
-            }
+                return new WP_REST_Response($json, 200); 
 
+            } else {
+                $json['type']   = 'error';
+                $json['message']    = esc_html__('user_id needed','docdirect');                
+            }
+            return new WP_REST_Response($json, 200);
         }
 
     }
 }
 
 add_action('rest_api_init',
-    function () {
-        $controller = new DocdirectAppPrivacySettingRoutes;
-        $controller->register_routes();
-    });
+function () {
+    $controller = new DocdirectAppPrivacySettingRoutes;
+    $controller->register_routes();
+});
