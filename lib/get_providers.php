@@ -623,7 +623,19 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					$query_args['meta_query']	= $meta_query;
 				}
 
-			}else{
+			} elseif( $request['listing_type'] === 'profile_data' ){
+				if( !empty( $request['user_id'] ) ){
+					$user_id 	= $request['user_id'];
+					$query_args	= array(
+						'role'  	=> 'professional',						
+						'include' 	=> array($user_id),
+					);
+				} else {
+					$json['type'] 		= 'error';
+					$json['message'] 	= esc_html__('User ID needed', 'docdirect_api');
+					return new WP_REST_Response($json, 200);
+				}
+			} else {
 				$json	= array();
 				$json['type']		= 'error';
 				$json['message']	= esc_html__('Please provide api type.','docdirect_api');

@@ -103,6 +103,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/blog/blog_categories.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/articles.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/create_article.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/delete_article.php';
+require plugin_dir_path( __FILE__ ) . 'lib/articles/user-articles.php';
 require plugin_dir_path( __FILE__ ) . 'lib/articles/manage_articles.php';
 require plugin_dir_path( __FILE__ ) . 'lib/question_answer/question.php';
 require plugin_dir_path( __FILE__ ) . 'lib/question_answer/recent_questions.php';

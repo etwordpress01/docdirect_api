@@ -37,9 +37,9 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
         {
             if (!empty($request['user_id']))
             {
-                $user_id = $request['user_id'];
-                $type = !empty($request['type']) ? esc_attr($request['type']) : '';
-                $current = !empty($request['current']) ? esc_attr($request['current']) : '';
+                $user_id    = $request['user_id'];
+                $type       = !empty($request['type']) ? esc_attr($request['type']) : '';
+                $current    = !empty($request['current']) ? esc_attr($request['current']) : '';
                 $provider_category = get_user_meta($user_id, 'directory_type', true);
                 remove_all_filters("content_save_pre");
 
@@ -52,15 +52,17 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                 if (empty($request['article_title'])) {
                     $json['type'] = 'error';
                     $json['message'] = esc_html__('Title field should not be empty.', 'docdirect');
-                    echo json_encode($json);
-                    die;
+                    return new WP_REST_Response($json, 200);
                 }
 
-                $title = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect');
+                $title          = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect');
                 $article_detail = force_balance_tags($request['article_detail']);
-
-                $submitted_file = $_FILES[ 'feature_image' ];
-                $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );
+                $submitted_file = !empty( $_FILES[ 'article_image' ] ) ? $_FILES[ 'article_image' ] : '';
+                if( !empty( $submitted_file ) ) {
+                    $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );
+                } else {
+                    $uploaded_image = array();
+                }
 
                 if ( !empty( $uploaded_image[ 'file' ] ) ){
                     $file_name = basename( $submitted_file[ 'name' ] );
@@ -83,22 +85,16 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                     $image_size	= 'thumbnail';
                     $thumbnail_url = docdirect_get_profile_image_url( $attach_data,$image_size ); //get image url
                 }else{
-                    $json['type'] = 'error';
-                    $json['message'] = esc_html__('image upload failed.', 'docdirect');
-                    echo json_encode($json);
-                    die;
+                    //nothing
                 }
 
                 if(!empty($attach_id)){
                     $attachment_id = $attach_id;
                 }else{
-                    $json['type'] = 'error';
-                    $json['message'] = esc_html__('image not found.', 'docdirect');
-                    echo json_encode($json);
-                    die;
+                    //nothing
                 }
 
-                $article_tags = !empty($request['article_tags']) ? $request['article_tags'] : array();
+                $article_tags       = !empty($request['article_tags']) ? $request['article_tags'] : array();
                 $article_categories = !empty($request['categories']) ? $request['categories'] : array();
 
                 $dir_profile_page = '';
@@ -112,7 +108,7 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                     $approve_articles = fw_get_db_settings_option('approve_articles', $default_value = null);
                 }
 
-                //add/edit job
+                //add/edit article
                 if (isset($type) && $type === 'add') {
 
                     if (isset($approve_articles) && $approve_articles === 'need_approval') {
@@ -195,20 +191,17 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                     } else {
                         $json['type'] = 'error';
                         $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect');
-                        echo json_encode($json);
-                        die;
+                        return new WP_REST_Response($json, 200);
                     }
                 } else {
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect');
-                    echo json_encode($json);
-                    die;
-                }
-
-
-                $json['type'] = 'success';
-                echo json_encode($json);
-                die;
+                    $json['message'] = esc_html__('Article type needed, please try again later.', 'docdirect');
+                    return new WP_REST_Response($json, 200);
+                }               
+            } else {
+                $json['type'] = 'error';
+                $json['message'] = esc_html__('user_id is needed', 'docdirect');
+                return new WP_REST_Response($json, 200);
             }
 
         }
