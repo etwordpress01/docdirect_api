@@ -30,17 +30,17 @@ if (!class_exists('DocdirectAppLanguagesRoute')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function get_languages($request) {
-            $languages_array = array();
+        public function get_languages( $request ) {
+            $languages_array = array();           
             $languages_array	= docdirect_prepare_languages();//Get Language Array
-            if(!empty($languages_array)){
+            if( !empty( $languages_array ) ){
                 $items	= array();
                 $item	= array();
-                foreach( $languages_array as $key=>$value ) {
-                    $item[$key] = $value;
-
-                }
-                $items[] = $item;
+                foreach( $languages_array as $key => $value ) {
+                    $item['key'] = $key;
+                    $item['language'] = $value;
+                    $items[] = $item;
+                }                
                 return new WP_REST_Response($items, 200);
             }
 

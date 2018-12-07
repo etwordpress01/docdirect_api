@@ -34,6 +34,18 @@ if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
             if (!empty($request['user_id'])) {
                 $user_identity	= $request['user_id'];
                 $json	= array();
+                $privacy = array (
+                    'appointments' => '',
+                    'phone' => '',
+                    'email' => '',
+                    'contact_form' => '',
+                    'opening_hours' => ''
+                );
+
+                foreach ($privacy as $key => $value) {
+                    
+                }
+
                 if( !empty( $request['privacy'] ) ){
                     update_user_meta( $user_identity, 'privacy', docdirect_sanitize_array( $request['privacy'] ) );
                 }

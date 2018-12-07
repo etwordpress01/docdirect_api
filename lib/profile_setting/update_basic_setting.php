@@ -30,17 +30,33 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function update_basic_setting($request)
-        {
+        public function update_basic_setting($request){
 
-            if(!empty($request['user_id']))
-            {
+            if(!empty($request['user_id'])){
 
                 $user_identity = $request['user_id'];
-                //Update Basics
-                if (!empty($request['basics'])) {
-                    foreach ($request['basics'] as $key => $value) {
-                        update_user_meta($user_identity, $key, esc_attr( $value ) );
+                
+				$basic_data	= array(
+					'nickname' 			=> 'nickname',
+					'first_name' 		=> 'first_name',
+					'last_name' 		=> 'last_name',
+					'phone_number' 		=> 'phone_number',
+					'user_url'			=> 'user_url',
+					'tagline' 			=> 'tagline',
+					'zip' 				=> 'zip',
+					'description' 		=> 'description',
+                    'latitude'          => 'latitude',
+                    'longitude'         => 'longitude'
+				);
+				
+				//Update Basics
+                if (!empty($basic_data)) {
+                    foreach ($basic_data as $key => $value) {
+						if( $key == 'user_url' ){
+							wp_update_user( array( 'ID' => $user_identity, 'user_url' => esc_url($request[$key]) ) );
+						} else{
+							update_user_meta($user_identity, $key, $request[$key]);
+						}
                     }
                 }                
                 

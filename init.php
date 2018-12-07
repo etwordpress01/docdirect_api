@@ -124,6 +124,15 @@ require plugin_dir_path( __FILE__ ) . 'lib/profile_setting/update_speciality_set
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/update_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/delete_service_category.php';
 require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/service_category_listings.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/user_services_listings.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/update_user_service.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/delete_user_service.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/user_bookings.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/get_booking_time_slots.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/book_appointment.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/provider_services_listing.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/provider_category_listings.php';
+require plugin_dir_path( __FILE__ ) . 'lib/booking_schedules/approve_disapprove_appointment.php';
 require plugin_dir_path( __FILE__ ) . 'lib/media/profile_media_uploader.php';
 require plugin_dir_path( __FILE__ ) . 'lib/get_team_listing.php';
 require plugin_dir_path( __FILE__ ) . 'lib/get_providers.php';

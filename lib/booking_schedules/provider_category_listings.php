@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectServiceCategoryListingsRoutes')) {
+if (!class_exists('DocdirectProviderServiceCategoryListingsRoutes')) {
 
-    class DocdirectServiceCategoryListingsRoutes extends WP_REST_Controller
+    class DocdirectProviderServiceCategoryListingsRoutes extends WP_REST_Controller
     {
 
         /**
@@ -13,7 +13,7 @@ if (!class_exists('DocdirectServiceCategoryListingsRoutes')) {
             $namespace = 'api/v' . $version;
             $base = 'booking_schedule';
 
-            register_rest_route($namespace, '/' . $base . '/category_list',
+            register_rest_route($namespace, '/' . $base . '/provider_category_list',
                 array(
                     array(
                         'methods' => WP_REST_Server::READABLE,
@@ -34,10 +34,10 @@ if (!class_exists('DocdirectServiceCategoryListingsRoutes')) {
         public function category_list($request)
         {
             $json = array();           
-            if(!empty($request['user_id']))
+            if(!empty($request['data_id']))
             {
 
-                $user_identity = $request['user_id'];
+                $user_identity = $request['data_id'];
                 $user_data = get_user_meta($user_identity, 'services_cats', true);
                 $user_data = !empty( $user_data ) ? $user_data : array();
                                 
@@ -65,8 +65,8 @@ if (!class_exists('DocdirectServiceCategoryListingsRoutes')) {
 }
 
 add_action('rest_api_init',
-    function ()
-    {
-        $controller = new DocdirectServiceCategoryListingsRoutes;
-        $controller->register_routes();
-    });
+function ()
+{
+    $controller = new DocdirectProviderServiceCategoryListingsRoutes;
+    $controller->register_routes();
+});
