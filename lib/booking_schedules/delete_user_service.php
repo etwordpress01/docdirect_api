@@ -1,7 +1,7 @@
 <?php
-if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
+if (!class_exists('DocdirectAppDeleteUserServiceRoutes')) {
 
-    class DocdirectAppDeleteServiceCategoryRoutes extends WP_REST_Controller{
+    class DocdirectAppDeleteUserServiceRoutes extends WP_REST_Controller{
 
         /**
          * Register the routes for the objects of the controller.
@@ -11,11 +11,11 @@ if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
             $namespace 	= 'api/v' . $version;
             $base 		= 'booking_schedule';
 
-            register_rest_route($namespace, '/' . $base . '/delete_service_category',
+            register_rest_route($namespace, '/' . $base . '/delete_service',
                 array(
                   array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array($this, 'delete_category'),
+                        'callback' => array($this, 'delete_service'),
                         'args' => array(),
                     ),
                 )
@@ -29,28 +29,28 @@ if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        function delete_category($request){
+        function delete_service($request){
             if(!empty($request['user_id'])){
                 $json = array();
                 $user_identity	= $request['user_id'];
                 $posted_key	 = sanitize_title($request['key']);
                 if( empty( $posted_key ) ){
                     $json['type']	= 'error';
-                    $json['message']	= esc_html__('Provide category key to remove','docdirect');
+                    $json['message']	= esc_html__('Provide service key to remove','docdirect');
                     return new WP_REST_Response($json, 200);
-                }
-
-                $services_cats	= array();
-                $services_cats = get_user_meta($user_identity , 'services_cats' , true);
-
-                if( !empty( $services_cats ) ){
-                    unset( $services_cats[$posted_key] );
-                }
-
-                update_user_meta( $user_identity, 'services_cats', $services_cats );
-
+                }                    
+                
+                $booking_services   = array();
+                $booking_services = get_user_meta($user_identity , 'booking_services' , true);
+        
+                unset( $booking_services[$posted_key] );        
+                update_user_meta( $user_identity, 'booking_services', $booking_services );             
                 $json['message_type']	 = 'success';
-                $json['message']  = esc_html__('Category deleted successfully.','docdirect');
+                $json['message']  = esc_html__('Service deleted successfully.','docdirect');
+                return new WP_REST_Response($json, 200);
+            } else {
+                $json['message_type']    = 'error';
+                $json['message']  = esc_html__('User ID needed','docdirect');
                 return new WP_REST_Response($json, 200);
             }
         }
@@ -60,6 +60,6 @@ if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
 
 add_action('rest_api_init',
     function () {
-        $controller = new DocdirectAppDeleteServiceCategoryRoutes;
+        $controller = new DocdirectAppDeleteUserServiceRoutes;
         $controller->register_routes();
     });

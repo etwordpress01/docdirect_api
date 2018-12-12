@@ -36,9 +36,16 @@ if (!class_exists('DocdirectAppImageUploaderRoutes')) {
             if(!empty($request['user_id'])){
                 $user_identity	= $request['user_id'];
                 $submitted_file = $_FILES['media'];
+                $type           = $request[ 'type' ];
+                $json = array();
+                
+                if( empty( $submitted_file ) || empty( $type ) ) {
+                    $json['type']       = 'error';
+                    $json['message']    = esc_html__('Kindly fill all fields', 'docdirect');
+                    return new WP_REST_Response($json, 200);
+                }
 
-                $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );
-                $type = $request[ 'type' ];
+                $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );                
                 //return $submitted_file;
                 if ( !empty( $submitted_file )) {
                     $file_name = basename( $submitted_file[ 'name' ] );
@@ -107,20 +114,24 @@ if (!class_exists('DocdirectAppImageUploaderRoutes')) {
                         update_user_meta( $user_identity, 'user_gallery', $gallery );
                     }
 
-                    $ajax_response = array(
-                        'success' => true,
+                    $json = array(
+                        'type' => 'success',
+                        'message' => 'Image uploaded',
                         'url' => $thumbnail_url,
                         'attachment_id' => $attach_id
                     );
 
-                    echo json_encode( $ajax_response );
-                    die;
+                    return new WP_REST_Response($json, 200); 
 
                 } else {
-                    $ajax_response = array( 'success' => false, 'reason' => 'Image upload failed!' );
-                    echo json_encode( $ajax_response );
-                    die;
+                    $json['type']       = 'error';
+                    $json['message']    = esc_html__('Image upload failed', 'docdirect');
+                    return new WP_REST_Response($json, 200);                   
                 }
+            } else {
+                $json['type']       = 'error';
+                $json['message']    = esc_html__('User ID missing', 'docdirect');
+                return new WP_REST_Response($json, 200);
             }
         }
 

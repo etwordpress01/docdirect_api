@@ -14,14 +14,13 @@ if (!class_exists('DocdirectAppSpecialitiesRoutes')) {
 			register_rest_route($namespace, '/' . $base . '/specialities_setting',
                 array(
                     array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_specialities'),
                         'args' => array(),
                     ),
                 )
             );
-        }
-		
+        }		
 
         /**
          * Get specialities

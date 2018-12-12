@@ -1,21 +1,23 @@
 <?php
-if (!class_exists('DocdirectAppUpdateServiceCategoryRoutes')) {
+if (!class_exists('DocdirectUpdateServiceCategorySettingRoutes')) {
 
-    class DocdirectAppUpdateServiceCategoryRoutes extends WP_REST_Controller{
+    class DocdirectUpdateServiceCategorySettingRoutes extends WP_REST_Controller
+    {
 
         /**
          * Register the routes for the objects of the controller.
          */
-        public function register_routes() {
-            $version 	= '1';
-            $namespace 	= 'api/v' . $version;
-            $base 		= 'booking_schedule';
+        public function register_routes()
+        {
+            $version = '1';
+            $namespace = 'api/v' . $version;
+            $base = 'booking_schedule';
 
-            register_rest_route($namespace, '/' . $base . '/update_service_category',
+            register_rest_route($namespace, '/' . $base . '/add_category',
                 array(
-                  array(
+                    array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array($this, 'update_category'),
+                        'callback' => array($this, 'update_category_setting'),
                         'args' => array(),
                     ),
                 )
@@ -24,69 +26,57 @@ if (!class_exists('DocdirectAppUpdateServiceCategoryRoutes')) {
 
 
         /**
-         * update service category
+         * Make Reviews Request
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        function update_category($request){
-            if(!empty($request['user_id'])){
+        public function update_category_setting($request)
+        {
+            $json = array();           
+            if(!empty($request['user_id']))
+            {
 
-                $user_identity	= $request['user_id'];
-
-                $cat_title	 = esc_attr($request['title']);
-
-                if( empty( $cat_title ) ){
-                    $json['type']	= 'error';
-                    $json['message']	= esc_html__('Please add title.','docdirect');
-                    echo json_encode($json);
-                    die;
+                $user_identity = $request['user_id'];
+                $user_data = get_user_meta($user_identity, 'services_cats', true);
+                $user_data = !empty( $user_data ) ? $user_data : array();
+                
+                //Form validation    
+                if( empty( $request['title'] ) ){
+                    $json['type']       = 'error';
+                    $json['message']    = esc_html__('Kindly add category title', 'docdirect');
+                    return new WP_REST_Response($json, 200);
                 }
+                
+                $title    = $request['title'];
+                $key      = sanitize_title($title);
 
-                $services_cats	= array();
-                $key	 = !empty( $request['key'] ) ? esc_attr( $request['key'] ) : 'new';
-                $type	 = !empty( $request['type'] ) ? esc_attr( $request['type'] ) : 'add';
-
-                if( $key === 'new' ) {
-                    $services_cats = get_user_meta($user_identity , 'services_cats' , true);
-                    $services_cats	= empty( $services_cats ) ? array() : $services_cats;
-                    $title	  = $cat_title;
-                    $key	  = sanitize_title($title);
-
-                    if ( !empty( $services_cats )
-                        && array_key_exists($key, $services_cats)
-
-                    ) {
-                        $key	  = sanitize_title($title).docdirect_unique_increment(3);
-                    }
-
-                    $new_cat[$key]	=  $title;
-
-                    $services_cats	= array_merge($services_cats,$new_cat);
-                    $message	= esc_html__('Category added successfully.','docdirect');
-                } else{
-                    $services_cats = get_user_meta($user_identity , 'services_cats' , true);
-                    $services_cats	= empty( $services_cats ) ? array() : $services_cats;
-                    $title	= esc_attr ( $request['title'] );
-                    $services_cats[$key]	= $title;
-                    $message	= esc_html__('Category updated successfully.','docdirect');
+                if ( !empty( $user_data )
+                    && array_key_exists($key, $user_data)
+                    
+                ) {
+                    $key      = sanitize_title($title).docdirect_unique_increment(3);
                 }
-
-                update_user_meta( $user_identity, 'services_cats', $services_cats );
-
-                $json['message_type']	 = 'success';
-                $json['message']  = $message;
-                echo json_encode($json);
-                die;
-
-            }
+                
+                $new_cat[$key]  =  $title;
+                
+                $user_data  = array_merge($user_data,$new_cat);
+                update_user_meta( $user_identity, 'services_cats', $user_data );
+                              
+                $json['type'] = 'success';
+                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+                return new WP_REST_Response($json, 200);
+            } 
+            $json['type']       = 'error';
+            $json['message']    = esc_html__('User ID needed', 'docdirect');
+            return new WP_REST_Response($json, 200);           
         }
-
     }
 }
 
 add_action('rest_api_init',
-    function () {
-        $controller = new DocdirectAppUpdateServiceCategoryRoutes;
+    function ()
+    {
+        $controller = new DocdirectUpdateServiceCategorySettingRoutes;
         $controller->register_routes();
     });

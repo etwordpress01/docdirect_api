@@ -45,6 +45,8 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
 					'tagline' 			=> 'tagline',
 					'zip' 				=> 'zip',
 					'description' 		=> 'description',
+                    'latitude'          => 'latitude',
+                    'longitude'         => 'longitude'
 				);
 				
 				//Update Basics
