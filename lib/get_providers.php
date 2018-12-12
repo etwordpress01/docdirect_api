@@ -1012,8 +1012,13 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 							$item['all'][$key] = maybe_unserialize($data);
 						}
 					} 
-
-                    $items[] = $item;
+					
+					if( $request['listing_type'] === 'profile_data' ){
+						 $items = $item; //single onject
+					} else{
+						 $items[] = $item; //array object
+					}
+                   
                 }
 
             }
