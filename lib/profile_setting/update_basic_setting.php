@@ -35,6 +35,7 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
             if(!empty($request['user_id'])){
 
                 $user_identity = $request['user_id'];
+				$key 		   = !empty( $request['key'] ) ? $request['key'] : 'basics';
                 
 				$basic_data	= array(
 					'nickname' 			=> 'nickname',
@@ -48,20 +49,50 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
                     'latitude'          => 'latitude',
                     'longitude'         => 'longitude'
 				);
-				
+					
+				$schedules_data	= array(
+					'mon_start' 	=> 'mon_start',
+					'mon_end' 		=> 'mon_end',
+					'tue_start' 	=> 'tue_start',
+					'tue_end' 		=> 'tue_end',
+					'wed_start' 	=> 'wed_start',
+					'wed_end' 		=> 'wed_end',
+					'thu_start' 	=> 'thu_start',
+					'thu_end' 		=> 'thu_end',
+                    'fri_start' 	=> 'fri_start',
+					'fri_end' 		=> 'fri_end',
+					'sat_start' 	=> 'sat_start',
+					'sat_end' 		=> 'sat_end',
+					'sun_start' 	=> 'sun_start',
+					'sun_end' 		=> 'sun_end',
+				);
+
 				//Update Basics
-                if (!empty($basic_data)) {
-                    foreach ($basic_data as $key => $value) {
-						if( $key == 'user_url' ){
-							wp_update_user( array( 'ID' => $user_identity, 'user_url' => esc_url($request[$key]) ) );
-						} else{
-							update_user_meta($user_identity, $key, $request[$key]);
+				if( $key === 'basics' ){
+					if (!empty($basic_data)) {
+						foreach ($basic_data as $key => $value) {
+							if( $key == 'user_url' ){
+								wp_update_user( array( 'ID' => $user_identity, 'user_url' => esc_url($request[$key]) ) );
+							} else{
+								update_user_meta($user_identity, $key, $request[$key]);
+							}
 						}
-                    }
-                }                
-                
-                $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+					} 
+				}
+				
+				//Update schedules
+				if( $key === 'schedules' ){
+					if (!empty($schedules_data)) {
+						$schedules = array(); 
+						foreach ($schedules_data as $key => $value) {
+							$schedules[$key] = $request[$key];
+						}
+						update_user_meta($user_identity, 'schedules', $schedules);
+					} 
+				}
+
+                $json['type'] 			= 'success';
+                $json['message'] 		= esc_html__('Settings saved.', 'docdirect');
                 return new WP_REST_Response($json, 200); 
             }
 
@@ -73,8 +104,7 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
 }
 
 add_action('rest_api_init',
-    function ()
-    {
-        $controller = new DocdirectUpdateBasicSettingRoutes;
-        $controller->register_routes();
-    });
+function (){
+	$controller = new DocdirectUpdateBasicSettingRoutes;
+	$controller->register_routes();
+});

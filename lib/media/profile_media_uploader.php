@@ -1,6 +1,6 @@
 <?php
-require_once( ABSPATH . 'wp-admin/includes/file.php' );
-require_once( ABSPATH . 'wp-admin/includes/image.php' );
+//require_once( ABSPATH . 'wp-admin/includes/file.php' );
+//require_once( ABSPATH . 'wp-admin/includes/image.php' );
 if (!class_exists('DocdirectAppImageUploaderRoutes')) {
 
     class DocdirectAppImageUploaderRoutes extends WP_REST_Controller{

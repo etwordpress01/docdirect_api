@@ -39,19 +39,6 @@ if (!class_exists('DocdirectUserArticlesRoutes')) {
                 $order 		= !empty($request['order']) ? $request['order'] : 'DESC';
                 $orderby 	= !empty($request['orderby']) ? $request['orderby'] : 'ID';
 
-                $query_args = array(
-                    'posts_per_page'        => -1,
-                    'post_type'             => 'sp_articles',
-                    'order'                 => $order,
-                    'orderby'               => $orderby,
-                    'post_status'           => 'publish',
-                    'author'                => $user_id,
-                    'ignore_sticky_posts'   => 1
-                );
-
-                $query = new WP_Query($query_args);
-                $count_post = $query->post_count;
-
                 //Main Query
                 $query_args = array(
                     'posts_per_page'        => -1,
@@ -63,6 +50,7 @@ if (!class_exists('DocdirectUserArticlesRoutes')) {
                     'ignore_sticky_posts'   => 1
                 );
                 $query = new WP_Query($query_args);
+				$count_post = $query->found_posts;
 
                 if ($query->have_posts()){
                     while ($query->have_posts()){
@@ -91,7 +79,8 @@ if (!class_exists('DocdirectUserArticlesRoutes')) {
                             array('width'=>150,'height'=>150) //size width,height
                         );
                         $post_view_count    = get_post_meta($post->ID, 'article_views', true);
-                        $item['author_id']      = $author_id;                        
+                        $item['author_id']      = $author_id;
+						$item['id']      		= $post->ID;
                         $item['author_name']    = $author_name;
                         $item['author_image']   = $author_avatar;
                         $item['author_url']     = esc_url(get_author_posts_url($author_id));
