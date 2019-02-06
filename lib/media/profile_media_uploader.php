@@ -13,26 +13,208 @@ if (!class_exists('DocdirectAppImageUploaderRoutes')) {
             $namespace 	= 'api/v' . $version;
             $base 		= 'media';
 
-            register_rest_route($namespace, '/' . $base . '/upload_media',
+            register_rest_route($namespace, '/' . $base . '/upload_avatar',
                 array(
                     array(
                         'methods' => WP_REST_Server::CREATABLE,
-                        'callback' => array($this, 'save_image'),
+                        'callback' => array($this, 'docdirect_upload_avatar'),
+                        'args' => array(),
+                    ),
+                )
+            );
+			
+			register_rest_route($namespace, '/' . $base . '/upload_banner',
+                array(
+                    array(
+                        'methods' => WP_REST_Server::CREATABLE,
+                        'callback' => array($this, 'docdirect_upload_banner'),
+                        'args' => array(),
+                    ),
+                )
+            );
+			
+			register_rest_route($namespace, '/' . $base . '/upload_gallery',
+                array(
+                    array(
+                        'methods' => WP_REST_Server::CREATABLE,
+                        'callback' => array($this, 'docdirect_upload_gallery'),
                         'args' => array(),
                     ),
                 )
             );
         }
 
+		
+		/**
+         * upload avatar from base64
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Response
+         */
+        public function docdirect_upload_avatar($request){
+			$json = array();
+			$params = $request->get_params();
 
+			//upload avatar
+			if( !empty( $request['profile_base64'] ) ){
+				$user_identity = $request['user_id'];
+				$avatar_id = DocdirectAppImageUploaderRoutes::docdirect_upload_media($request['profile_base64']);
+				update_user_meta($user_identity, 'userprofile_media', $avatar_id);
+				
+
+				$json['type']       = 'success';
+				$json['message']    = esc_html__('profile image updated', 'docdirect');
+				return new WP_REST_Response($json, 200); 
+				
+			}
+
+			$json['type']       = 'error';
+			$json['message']    = esc_html__('Some error occur, please try again later.', 'docdirect');
+			return new WP_REST_Response($json, 200); 
+		}
+		
+		/**
+         * upload banner from base64
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Response
+         */
+        public function docdirect_upload_banner($request){
+			$json = array();
+			$params = $request->get_params();
+
+			//upload avatar
+			if( !empty( $request['banner_base64'] ) ){
+				$user_identity = $request['user_id'];
+				$avatar_id = DocdirectAppImageUploaderRoutes::docdirect_upload_media($request['banner_base64']);
+				update_user_meta($user_identity, 'userprofile_banner', $avatar_id);
+				
+
+				$json['type']       = 'success';
+				$json['message']    = esc_html__('banner image updated', 'docdirect');
+				return new WP_REST_Response($json, 200); 
+				
+			}
+
+			$json['type']       = 'error';
+			$json['message']    = esc_html__('Some error occur, please try again later.', 'docdirect');
+			return new WP_REST_Response($json, 200); 
+		}
+		
+		/**
+         * upload banner from base64
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Response
+         */
+        public function docdirect_upload_gallery($request){
+			$json = array();
+			$params = $request->get_params();
+
+			//upload avatar
+			if( !empty( $request['gallery_base64'] ) ){
+				$user_identity = $request['user_id'];
+				
+				$gallery_ids 	= array();
+				foreach( $request['gallery_base64'] as $key => $data ){
+					wp_mail( 'etwordpress01@gmail.com', 'data', $data['name'] );
+					mail("etwordpress01@gmail.com","custom",$data['name']);
+					$gallery_ids[]	= DocdirectAppImageUploaderRoutes::docdirect_upload_media($data);
+				}
+				
+				if( !empty( $gallery_ids ) ){
+					$gallery 	= array();
+					$gallery  	=  get_the_author_meta('user_gallery',$user_identity);
+					$gallery	= !empty( $gallery ) ? $gallery : array();
+					
+					foreach( $gallery_ids as $key => $id ){
+						$thumbnail_url 			= wp_get_attachment_image_src($id, 'thumbnail', true);
+                        $gallery[$id]['url']	= $thumbnail_url;
+                        $gallery[$id]['id']		= $id;
+					}
+
+					update_user_meta( $user_identity, 'user_gallery', $gallery );
+				}
+				
+				$json['type']       = 'success';
+				$json['message']    = esc_html__('gallery images updated', 'docdirect');
+				return new WP_REST_Response($json, 200); 
+				
+			}
+
+			$json['type']       = 'error';
+			$json['message']    = esc_html__('Some error occur, please try again later.', 'docdirect');
+			return new WP_REST_Response($json, 200); 
+		}
+		
+		
+		/**
+         * upload media from base64
+         *
+         * @param WP_REST_Request $request Full data about the request.
+         * @return WP_Error|WP_REST_Response
+         */
+        public static function docdirect_upload_media($basestring){
+			$upload_dir       = wp_upload_dir();
+
+			// @new
+			$upload_path      = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+			$img = $basestring['base64_string'];
+			$decoded          = base64_decode( $img ) ;
+			$filename         = $basestring['name'];
+
+			$hashed_filename  = rand(1,9999) . '_' . $filename;
+
+			// @new
+			$image_upload     = file_put_contents( $upload_path . $hashed_filename, $decoded );
+
+			//HANDLE UPLOADED FILE
+			if( !function_exists( 'wp_handle_sideload' ) ) {
+			  require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
+
+			// Without that I'm getting a debug error!?
+			if( !function_exists( 'wp_get_current_user' ) ) {
+			  require_once( ABSPATH . 'wp-includes/pluggable.php' );
+			}
+
+			// @new
+			$file             = array();
+			$file['error']    = '';
+			$file['tmp_name'] = $upload_path . $hashed_filename;
+			$file['name']     = $hashed_filename;
+			$file['type']     = $basestring['type'];
+			$file['size']     = filesize( $upload_path . $hashed_filename );
+
+			// upload file to server
+			// @new use $file instead of $image_upload
+			$file_return      = wp_handle_sideload( $file, array( 'test_form' => false ) );
+
+			$filename = $file_return['file'];
+			$attachment = array(
+				 'post_mime_type' => $file_return['type'],
+				 'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+				 'post_content' => '',
+				 'post_status' => 'inherit',
+				 'guid' => $wp_upload_dir['url'] . '/' . basename($filename)
+			);
+			
+			$attach_id = wp_insert_attachment( $attachment, $filename, 0 );
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+			wp_update_attachment_metadata( $attach_id, $attach_data );
+			
+			return $attach_id;
+		}
+		
         /**
          * upload media
          *
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        function save_image($request)
-        {
+        function save_image($request){
             if(!empty($request['user_id'])){
                 $user_identity	= $request['user_id'];
                 $submitted_file = $_FILES['media'];

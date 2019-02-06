@@ -38,7 +38,7 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
             if (!empty($request['user_id']))
             {
                 $user_id    = $request['user_id'];
-                $type       = !empty($request['type']) ? esc_attr($request['type']) : '';
+                $type       = !empty($request['submit_type']) ? esc_attr($request['submit_type']) : '';
                 $current    = !empty($request['current']) ? esc_attr($request['current']) : '';
                 $provider_category = get_user_meta($user_id, 'directory_type', true);
                 remove_all_filters("content_save_pre");
@@ -57,42 +57,13 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
 
                 $title          = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect');
                 $article_detail = force_balance_tags($request['article_detail']);
-                $submitted_file = !empty( $_FILES[ 'article_image' ] ) ? $_FILES[ 'article_image' ] : '';
-                if( !empty( $submitted_file ) ) {
-                    $uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) );
-                } else {
-                    $uploaded_image = array();
-                }
-
-                if ( !empty( $uploaded_image[ 'file' ] ) ){
-                    $file_name = basename( $submitted_file[ 'name' ] );
-                    $file_type = wp_check_filetype( $uploaded_image[ 'file' ] );
-
-                    // Prepare an array of post data for the attachment.
-                    $attachment_details = array(
-                        'guid' => $uploaded_image[ 'url' ],
-                        'post_mime_type' => $file_type[ 'type' ],
-                        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $file_name ) ),
-                        'post_content' => '',
-                        'post_status' => 'inherit'
-                    );
-
-                    $attach_id 	 = wp_insert_attachment( $attachment_details, $uploaded_image[ 'file' ] );
-                    $attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded_image[ 'file' ] );
-                    wp_update_attachment_metadata( $attach_id, $attach_data );
-
-                    //Image Size
-                    $image_size	= 'thumbnail';
-                    $thumbnail_url = docdirect_get_profile_image_url( $attach_data,$image_size ); //get image url
-                }else{
-                    //nothing
-                }
-
-                if(!empty($attach_id)){
-                    $attachment_id = $attach_id;
-                }else{
-                    //nothing
-                }
+                
+				//upload image
+				$attachment_id = '';
+				if( !empty( $request['article_base64'] ) ){
+					$attachment_id = DocdirectAppImageUploaderRoutes::docdirect_upload_media($request['article_base64']);
+				}
+				
 
                 $article_tags       = !empty($request['article_tags']) ? $request['article_tags'] : array();
                 $article_categories = !empty($request['categories']) ? $request['categories'] : array();

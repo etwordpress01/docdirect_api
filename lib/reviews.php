@@ -14,7 +14,7 @@ if (!class_exists('DocdirectReviewsRoutes')) {
             register_rest_route($namespace, '/' . $base . '/user_reviews',
                 array(
                   array(
-                        'methods' => WP_REST_Server::CREATABLE,
+                        'methods' => WP_REST_Server::READABLE,
                         'callback' => array(&$this, 'get_reviews'),
                         'args' => array(),
                     ),
@@ -35,17 +35,6 @@ if (!class_exists('DocdirectReviewsRoutes')) {
                 $items = array();
                 $item = array();
                 $item['review_count']  =  intval( apply_filters('docdirect_count_reviews',$user_id) );
-				
-                foreach( $review_data['by_ratings'] as $key => $value ) {
-                    $final_rate = 0;
-                    if (!empty($value['rating']) && !empty($value['rating'])) {
-                        $get_sum = $value['rating'];
-                        $get_total = $value['total'];
-                        $final_rate = $get_sum / $get_total * 100;
-                    } else {
-                        $final_rate = 0;
-                    }
-                }
 
                 if( apply_filters('docdirect_count_reviews',$user_id) > 0 ){
                     if (empty($paged)) $paged = 1;

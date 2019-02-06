@@ -33,7 +33,6 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
         public function update_basic_setting($request){
 
             if(!empty($request['user_id'])){
-
                 $user_identity = $request['user_id'];
 				$key 		   = !empty( $request['key'] ) ? $request['key'] : 'basics';
                 
@@ -92,6 +91,7 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
 				}
 
                 $json['type'] 			= 'success';
+				$json['base64'] 		= $avatar_id;
                 $json['message'] 		= esc_html__('Settings saved.', 'docdirect');
                 return new WP_REST_Response($json, 200); 
             }
@@ -100,6 +100,7 @@ if (!class_exists('DocdirectUpdateBasicSettingRoutes')) {
             $json['message']    = esc_html__('user_id Needed.', 'docdirect');
             return new WP_REST_Response($json, 200); 
         }
+
     }
 }
 
