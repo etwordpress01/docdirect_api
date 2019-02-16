@@ -92,9 +92,7 @@ if (!class_exists('DocdirectUserArticlesRoutes')) {
                         $item['content']        = esc_attr(get_the_content());
                         $items[] = $item;
                     }
-					
-					$json['type'] = 'success';
-					$json['message'] = esc_html__('User ID is required', 'docdirect');
+
 					return new WP_REST_Response($items, 200);
 					
                 } else{

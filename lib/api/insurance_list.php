@@ -40,8 +40,7 @@ if (!class_exists('DocdirectAppInsuranceListRoute')) {
                     $item['slug']=$insurance->slug;
                     $items[] = $item;
                 }
-				$json['type']	= 'success';
-				$json['message']	= esc_html__('Insurance found.','docdirect');
+
                 return new WP_REST_Response($items, 200);
             } else{
 				$json['type']	= 'error';

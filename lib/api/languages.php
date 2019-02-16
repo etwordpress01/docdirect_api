@@ -42,9 +42,7 @@ if (!class_exists('DocdirectAppLanguagesRoute')) {
                     $item['language'] = $value;
                     $items[] = $item;
                 }                
-				
-				$json['type']	= 'success';
-				$json['message']	= esc_html__('Languages found','docdirect');
+
                 return new WP_REST_Response($items, 200);
             } else{
 				$json['type']	= 'error';

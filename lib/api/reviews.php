@@ -105,9 +105,7 @@ if (!class_exists('DocdirectReviewsRoutes')) {
                     }
 
                 }
-				
-				$items['type']	= 'success';
-				$items['message']	= esc_html__('Review found','docdirect');
+
 				return new WP_REST_Response($items, 200);
             } else{
 				$json['type']	= 'error';

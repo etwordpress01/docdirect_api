@@ -60,9 +60,7 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 					
                     $items[] = $item;
                 }
-				
-				$items['type']		= 'error';
-				$items['message']	= esc_html__('Categories found.','docdirect');
+
 				return new WP_REST_Response($items, 200);
 			}  else{
 				$json['type']	= 'error';
