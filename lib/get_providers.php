@@ -30,11 +30,19 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
          * @return WP_Error|WP_REST_Response
          */
         public function get_listing($request){
+			$limit			= !empty( $request['show_users'] ) ? intval( $request['show_users'] ) : 10;
+			$page_number	= !empty( $request['page_number'] ) ? intval( $request['page_number'] ) : 1;
+			$offset 		= ($page_number - 1) * $limit;
+			
+			$json	= array();
+			$json['type']		= 'error';
+			$json['message']	= esc_html__('Some error occur, please try again later','docdirect_api');
+			
             if( $request['listing_type'] === 'featured' ){
 				$today = time();
-				$show_users	= 10;
+
 				$order		 = 'DESC';
-				$is_verify	= 'on';
+				$is_verify	 = 'on';
 
 				$query_args	= array(
 					'role'  => 'professional',
@@ -65,8 +73,11 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 
 				$query_args['meta_key']	   = 'user_featured';
 				$query_args['orderby']	   = 'meta_value';
+				
+				$query_args['number']	= $limit;
+				$query_args['offset']	= $offset;
+				
 			} elseif( $request['listing_type'] === 'latest' ){
-				$show_users	= 10;
 				$order		 = 'DESC';
 
 				$query_args	= array(
@@ -76,10 +87,11 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 				);
 
 				$query_args['orderby']	   = 'ID';
+				$query_args['number']	= $limit;
+				$query_args['offset']	= $offset;
 			} elseif( $request['listing_type'] === 'search' ){
 				$item 				= array();
 				$items 				= array();
-				$json				= array();
 				$directories		= array();
 				$meta_query_args 	= array();
 				$city 				= '';
@@ -306,8 +318,6 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					);
 				}
 
-
-
 				//Cities
 				if(  !empty( $city ) ){
 					$meta_query_args[] = array(
@@ -316,7 +326,6 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 						'compare'   => '=',
 					);
 				}
-
 
 				//Photos search
 				if( !empty( $photos ) &&  $photos === 'true' ){
@@ -463,8 +472,10 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					//Distance in miles or kilometers
 					if (function_exists('fw_get_db_settings_option')) {
 						$dir_distance_type = fw_get_db_settings_option('dir_distance_type');
+						$google_key = fw_get_db_settings_option('google_key');
 					} else{
 						$dir_distance_type = 'mi';
+						$google_key = '';
 					}
 
 					if( $dir_distance_type === 'km' ) {
@@ -482,8 +493,8 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 							'headers' => array('Accept-Encoding' => ''),
 							'sslverify' => false
 						);
-
-						$url	    = 'http://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false';
+						
+						$url	 	= 'https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&key='.$google_key;
 						$response   = wp_remote_get( $url, $args );
 						$geocode	= wp_remote_retrieve_body($response);
 
@@ -533,6 +544,9 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					}
 				}
 				
+				$query_args['number']	= $limit;
+				$query_args['offset']	= $offset;
+				
 			} else if( $request['listing_type'] === 'teams' ){
 				$id	= $request['id'];
 				if( empty( $id ) ){
@@ -545,45 +559,38 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 				$teams    = !empty($teams) && is_array( $teams ) ? $teams : array();
 
 				if( empty( $teams ) ){
-					$items['type']	= 'error';
-					$items['message']	= esc_html__('No user is added in the teams.','docdirect_api');
-					return new WP_REST_Response($items, 200);
+					$json['type']	= 'error';
+					$json['message']	= esc_html__('No user is added in the teams.','docdirect_api');
+					return new WP_REST_Response($json, 203);
 				}
 
 				$total_users = (int)count($teams); //Total Users
 
 
-				$query_args	= array(
-										'role'  	=> 'professional',
-										'include' 	=> $teams
-									 );
+				$query_args	= array('role'  	=> 'professional',
+									'include' 	=> $teams
+								);
 				
 			} elseif( $request['listing_type'] === 'favorites' ){
 				$items	= array();
 				$user_id	= $request['user_id'];
-				$offset		= $request['offset'];
 
 				if( empty( $user_id ) ){
 					$items['type']	= 'error';
 					$items['message']	= esc_html__('Please provide user id.','docdirect_api');
-					return new WP_REST_Response($items, 200);
+					return new WP_REST_Response($items, 203);
 				}
 
 				$wishlist    	 = get_user_meta($user_id,'wishlist', true);
 				$wishlist    	 = !empty($wishlist) && is_array( $wishlist ) ? $wishlist : array();
 
 				if( empty( $wishlist ) ){
-					$items['type']	= 'error';
-					$items['message']	= esc_html__('No user is added in the favorite listing.','docdirect_api');
-					return new WP_REST_Response($items, 200);
+					$json['type']	= 'error';
+					$json['message']	= esc_html__('No user is added in the favorite listing.','docdirect_api');
+					return new WP_REST_Response($json, 203);
 				}
 
 				$today 			= time();
-				$dir_search_pagination = fw_get_db_settings_option('dir_search_pagination');
-				$per_page		= !empty( $dir_search_pagination ) ? $dir_search_pagination : get_option('posts_per_page');
-				$limit 			= (int)$per_page;
-				$offset 		= 0;
-
 				$order		 	= 'DESC';
 				$is_verify		= 'on';
 
@@ -595,12 +602,13 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 
 				$query_args['number']	= $limit;
 				$query_args['offset']	= $offset;
+				
 			} elseif( $request['listing_type'] === 'category_providers' ){
 				$id	= $request['id'];
 				if( empty( $id ) ){
-					$items['type']	= 'error';
-					$items['message']	= esc_html__('Please select category.','docdirect_api');
-					return new WP_REST_Response($items, 200);
+					$json['type']	= 'error';
+					$json['message']	= esc_html__('Please select category.','docdirect_api');
+					return new WP_REST_Response($json, 203);
 				}
 				
 				$order		 	= 'DESC';
@@ -622,6 +630,9 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					$meta_query	= array_merge($query_args,$meta_query_args);
 					$query_args['meta_query']	= $meta_query;
 				}
+				
+				$query_args['number']	= $limit;
+				$query_args['offset']	= $offset;
 
 			} elseif( $request['listing_type'] === 'profile_data' ){
 				if( !empty( $request['user_id'] ) ){
@@ -630,16 +641,16 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 						'role'  	=> 'professional',						
 						'include' 	=> array($user_id),
 					);
+					
 				} else {
 					$json['type'] 		= 'error';
-					$json['message'] 	= esc_html__('User ID needed', 'docdirect_api');
-					return new WP_REST_Response($json, 200);
+					$json['message'] 	= esc_html__('User ID required', 'docdirect_api');
+					return new WP_REST_Response($json, 203);
 				}
 			} else {
-				$json	= array();
 				$json['type']		= 'error';
 				$json['message']	= esc_html__('Please provide api type.','docdirect_api');
-				return new WP_REST_Response($json, 200);
+				return new WP_REST_Response($json, 203);
 			}
 			
             $user_query  = new WP_User_Query($query_args);
@@ -856,46 +867,59 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					//data
 					foreach( $meta_list as $key => $value ){
 						$data  = get_user_meta($user->ID, $key, true);
-
+						$array_type_data = array('user_profile_specialities','awards','education','experience','by_ratings','prices_list','services_cats','wishlist','booking_services','teams_data');
+						
 						if( $key === 'user_gallery' ){
-							$user_gallery = maybe_unserialize($data);
-							$db_user_gallery = array();
+							if( !empty( $data ) ){
+								$user_gallery = maybe_unserialize($data);
+								$db_user_gallery = array();
 
-							foreach( $user_gallery as $gkey => $value ){
-								$thumbnail = docdirect_get_image_source($gkey, 150, 150);
-								$full = docdirect_get_image_source($gkey, 0, 0);
-								$db_user_gallery[$gkey]['thumb'] = $thumbnail;
-								$db_user_gallery[$gkey]['full'] = $full;
-								$db_user_gallery[$gkey]['id']  = $gkey;
+								foreach( $user_gallery as $gkey => $value ){
+									$thumbnail = docdirect_get_image_source($gkey, 150, 150);
+									$full = docdirect_get_image_source($gkey, 0, 0);
+									$db_user_gallery[$gkey]['thumb'] = $thumbnail;
+									$db_user_gallery[$gkey]['full'] = $full;
+									$db_user_gallery[$gkey]['id']  = $gkey;
+								}
+								$item['all'][$key]	= array_values( $db_user_gallery );
+							} else{
+								$item['all'][$key]	= array();
 							}
-							$item['all'][$key]	= array_values( $db_user_gallery );
+							
 							
 						}elseif( $key === 'languages' ){
 							$languages	= docdirect_prepare_languages();
-							$db_languages = maybe_unserialize($data);
-							$db_user_languages = array();
-							foreach( $db_languages as $lkey => $value ){
-								$db_user_languages[$lkey]  = $languages[$lkey];
+							if( !empty( $data ) ){
+								$db_languages = maybe_unserialize($data);
+								$db_user_languages = array();
+								foreach( $db_languages as $lkey => $value ){
+									$db_user_languages[$lkey]  = $languages[$lkey];
+								}
+
+								$item['all'][$key]	= array_values( $db_user_languages );
+							} else{
+								$item['all'][$key]	= array();
 							}
-							
-							$item['all'][$key]	= array_values( $db_user_languages );
-							
 						}elseif( $key === 'insurance' ){
-							$user_insurance = maybe_unserialize($data);
-							$db_user_insurance = array();
-							
-							if( !empty( $user_insurance ) ){
-								foreach( $user_insurance as $i_key => $value ){
-									$insurance	    = get_term_by( 'slug', $value, 'insurance');
-									if( !empty( $insurance ) ) {
-										if( !empty( $insurance->name ) ){
-											$db_user_insurance[$i_key]  = $insurance->name;
+							if( !empty( $data ) ){
+								$user_insurance = maybe_unserialize($data);
+								$db_user_insurance = array();
+
+								if( !empty( $user_insurance ) ){
+									foreach( $user_insurance as $i_key => $value ){
+										$insurance	    = get_term_by( 'slug', $value, 'insurance');
+										if( !empty( $insurance ) ) {
+											if( !empty( $insurance->name ) ){
+												$db_user_insurance[$i_key]  = $insurance->name;
+											}
 										}
 									}
 								}
+
+								$item['all'][$key]	= array_values( $db_user_insurance );
+							} else{
+								$item['all'][$key]	= array();
 							}
-							
-							$item['all'][$key]	= array_values( $db_user_insurance );
 							
 						}elseif( $key === 'articles' ){
 							$order 		= 'DESC';
@@ -1006,8 +1030,19 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 							}
 	
 							$item['all'][$key]	= array_values( $qa_array );
-						}elseif( $key === 'user_profile_specialities' ){
-							$item['all'][$key]	= array_values( $data );
+						}elseif( in_array($key,$array_type_data) ){
+							if( !empty( $data ) ){
+								$item['all'][$key]	= array_values( $data );
+							} else{
+								$item['all'][$key]	= array();
+							}
+						}elseif( $key === 'schedules' ){
+							if( !empty( $data ) ){
+								$item['all'][$key]	= $data;
+							} else{
+								$item['all'][$key]	= new stdClass();
+								
+							}
 						}else{
 							$item['all'][$key] = maybe_unserialize($data);
 						}
@@ -1020,10 +1055,11 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					}
                    
                 }
-
-            }
-
-            return new WP_REST_Response($items, 200);
+				
+				return new WP_REST_Response($items, 200);
+            }else{
+				return new WP_REST_Response($json, 203);
+			} 
         }
 
     }

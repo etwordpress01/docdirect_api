@@ -35,23 +35,18 @@ if (!class_exists('DocdirectBookingListRoutes')) {
             {
                 global $paged;
                 $dir_obj	= new DocDirect_Scripts();
-                $user_id = $request['user_id'];
-                $user_identity	= $request['user_id'];
-                $url_identity	= $user_identity;
-                $items = array();
-                $item = array();
-
-                if( isset( $request['user_id'] ) && !empty( $request['user_id'] ) ){
-                    $url_identity	= $request['user_id'];
-                }
+                $user_id 	= $request['user_id'];
+                $items 		= array();
+                $item 				= array();
+				$meta_query_args 	= array();
 
                 if (function_exists('fw_get_db_settings_option')) {
                     $currency_select = fw_get_db_settings_option('currency_select');
                 } else{
                     $currency_select = 'USD';
                 }
-
-
+				
+				
                 $meta_query_args[] = array(
                     'key'     => 'bk_user_to',
                     'value'   => $user_id,
@@ -67,8 +62,6 @@ if (!class_exists('DocdirectBookingListRoutes')) {
                         'type'	  => 'NUMERIC'
                     );
                 }
-
-
 
                 $args 		= array( 'posts_per_page' => -1,
                     'post_type' => 'docappointments',
@@ -99,14 +92,7 @@ if (!class_exists('DocdirectBookingListRoutes')) {
                     $meta_query_args	= array_merge( $query_relation,$meta_query_args );
                     $args['meta_query'] = $meta_query_args;
                 }
-
-                $dir_profile_page = '';
-                if (function_exists('fw_get_db_settings_option')) {
-                    $dir_profile_page = fw_get_db_settings_option('dir_profile_page', $default_value = null);
-                }
-
-                $profile_page = isset($dir_profile_page[0]) ? $dir_profile_page[0] : '';
-
+				
                 $query 		= new WP_Query($args);
                 $services_cats = get_user_meta($user_identity , 'services_cats' , true);
                 $booking_services = get_user_meta($user_identity , 'booking_services' , true);
@@ -114,7 +100,7 @@ if (!class_exists('DocdirectBookingListRoutes')) {
                 $time_format = get_option('time_format');
 
                 $counter	= 0;
-                if( $query->have_posts() ):
+                if( $query->have_posts() ){
                     while($query->have_posts()) : $query->the_post();
                         global $post;
                         $counter++;
@@ -141,37 +127,40 @@ if (!class_exists('DocdirectBookingListRoutes')) {
 
                         $time = explode('-',$bk_slottime);
 
-                        $item['Status'] = esc_attr( docdirect_prepare_order_status( 'value',$bk_status ) );
+                        $item['status'] = esc_attr( docdirect_prepare_order_status( 'value',$bk_status ) );
                         $item['id'] = intval( $post->ID );
-                        $item['TRACKING ID'] = esc_attr( $bk_code );
+                        $item['tracking_id'] = esc_attr( $bk_code );
                         $item['subject'] = esc_attr( $bk_subject );
                         $item['phone'] = esc_attr( $bk_userphone );
                         $item['user name'] = esc_attr( $bk_username );
                         $item['email'] =esc_attr( $bk_useremail );
                         if( !empty( $services_cats[$bk_category] ) ){
-                            $item['Category'] = $services_cats[$bk_category];
+                            $item['category'] = $services_cats[$bk_category];
                         }
                         if( !empty( $booking_services[$bk_service] ) ){
-                            $item['Service'] = esc_attr( $booking_services[$bk_service]['title'] );
+                            $item['service'] = esc_attr( $booking_services[$bk_service]['title'] );
                         }
                         if( !empty( $bk_booking_date ) ){
-                            $item['Appointment date'] = date($date_format,strtotime($bk_booking_date));
+                            $item['appointment_date'] = date($date_format,strtotime($bk_booking_date));
                         }
-                        $item['Meeting Time'] = date_i18n($time_format,strtotime('2016-01-01 '.$time[0]) );
-                        $item['Payment Type'] = esc_attr( docdirect_prepare_payment_type( 'value',$bk_payment ));
+				
+                        $item['meeting_time'] = date_i18n($time_format,strtotime('2016-01-01 '.$time[0]) );
+                        $item['payment_type'] = esc_attr( docdirect_prepare_payment_type( 'value',$bk_payment ));
                         if( !empty( $payment_amount ) ){
-                            $item['Appointment Fee'] = $payment_amount;
+                            $item['appointment_fee'] = $payment_amount;
                         }
                         if( !empty( $bk_transaction_status ) ){
-                            $item['Payment Status'] = docdirect_prepare_order_status( 'value',$bk_transaction_status );
+                            $item['payment_status'] = docdirect_prepare_order_status( 'value',$bk_transaction_status );
                         }
                         if( !empty( $bk_booking_note ) ){
                             $item['notes'] = $bk_booking_note;
                         }
-                         $items[] = $item;
+                        
+						$items[] = $item;
 
                     endwhile;
-                endif;
+				}
+				
                 return new WP_REST_Response($items, 200);
             }
         }

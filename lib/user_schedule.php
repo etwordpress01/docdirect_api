@@ -31,8 +31,9 @@ if (!class_exists('DocdirectAppUserScheduleRoutes')) {
          */
         public function get_schedule($request) {
             if(!empty($request['user_id'])){
-                $items = array();
-                $item = array();
+				$json 	= array();
+                $items 	= array();
+                $item 	= array();
                 $user_identity= $request['user_id'];
                 $db_schedules	= array();
                 $db_schedules = get_user_meta( $user_identity, 'schedules', true);
@@ -42,7 +43,6 @@ if (!class_exists('DocdirectAppUserScheduleRoutes')) {
                 $time_format	= !empty( $time_format ) ? $time_format : 'g:i A';
                 if( isset( $schedules ) && !empty( $schedules ) ) {
                     foreach ($schedules as $key => $value) {
-
                         $start_time = isset($db_schedules[$key . '_start']) ? $db_schedules[$key . '_start'] : '';
                         $end_time = isset($db_schedules[$key . '_end']) ? $db_schedules[$key . '_end'] : '';
                         $item['value'] = $value;
@@ -52,12 +52,13 @@ if (!class_exists('DocdirectAppUserScheduleRoutes')) {
                     }
                 }
 
-
-            }
-            return new WP_REST_Response($items, 200);
-
+				return new WP_REST_Response($items, 200);
+            } else{
+				$json['type']	= 'error';
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				return new WP_REST_Response($json, 203);
+			}
         }
-
     }
 }
 

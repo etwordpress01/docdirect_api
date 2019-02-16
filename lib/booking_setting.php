@@ -29,10 +29,8 @@ if (!class_exists('DocdirectBookingSettingRoutes')) {
          * @param WP_REST_Request $request Full data about the request.
          * @return WP_Error|WP_REST_Response
          */
-        public function set_booking_setting($request)
-        {
-            if (!empty($request['user_id']))
-            {
+        public function set_booking_setting($request){
+            if (!empty($request['user_id'])){
                 $user_identity	= $request['user_id'];
                 if(!empty($request['confirmation_title'])){
                     update_user_meta( $user_identity, 'confirmation_title', sanitize_text_field( $request['confirmation_title'] ) );
@@ -85,6 +83,7 @@ if (!class_exists('DocdirectBookingSettingRoutes')) {
                 if(!empty($request['stripe_decimal'])){
                     update_user_meta( $user_identity, 'stripe_decimal', sanitize_text_field( $request['stripe_decimal'] ) );
                 }
+				
                 $json['type'] = 'success';
                 $json['message'] = esc_html__('Booking settings updated.','docdirect');
 
