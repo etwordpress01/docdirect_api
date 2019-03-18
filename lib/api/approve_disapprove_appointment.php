@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to approve appointments
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectApproveAppointmentSettingRoutes')) {
 
     class DocdirectApproveAppointmentSettingRoutes extends WP_REST_Controller
@@ -40,7 +51,7 @@ if (!class_exists('DocdirectApproveAppointmentSettingRoutes')) {
                 
                 if( empty( $type ) || empty( $post_id ) ){
                     $json['type']   = 'error';
-                    $json['message']    = esc_html__('Please provide required information','docdirect');
+                    $json['message']    = esc_html__('Please provide required information','docdirect_api');
                     return new WP_REST_Response($json, 203);   
                 }
 
@@ -56,7 +67,7 @@ if (!class_exists('DocdirectApproveAppointmentSettingRoutes')) {
                     
                     //Send status                  
                     $json['type']           = 'success';
-                    $json['message']        = esc_html__('Appointment status has been updated.','docdirect');
+                    $json['message']        = esc_html__('Appointment status has been updated.','docdirect_api');
                     return new WP_REST_Response( $json, 200 );   
                 
                 } else if( $type === 'cancel' ){
@@ -72,12 +83,12 @@ if (!class_exists('DocdirectApproveAppointmentSettingRoutes')) {
                     
                     //Return status                   
                     $json['type']          = 'success';
-                    $json['message']        = esc_html__('Appointment has been cancelled.','docdirect');
+                    $json['message']        = esc_html__('Appointment has been cancelled.','docdirect_api');
                     return new WP_REST_Response($json, 200);   
                 }                                
             } else {
                 $json['type']       = 'error';
-                $json['message']    = esc_html__('User ID needed', 'docdirect');
+                $json['message']    = esc_html__('User ID needed', 'docdirect_api');
                 return new WP_REST_Response($json, 203);           
             }
         }

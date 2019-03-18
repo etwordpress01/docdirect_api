@@ -30,8 +30,7 @@ if (!class_exists('DocdirectAppUpdateUserScheduleRoutes')) {
          */
         public function update_user_schedule($request)
         {
-            if (!empty($request['user_id']) && !empty($request['time_format']) )
-            {
+            if (!empty($request['user_id']) && !empty($request['time_format']) ){
                 $json           = array();
                 $user_identity  = $request['user_id'];
                 $schedules      = array();
@@ -44,15 +43,13 @@ if (!class_exists('DocdirectAppUpdateUserScheduleRoutes')) {
                 }
                 
                 $json['type']	= 'success';
-                $json['message']	= esc_html__('Schedules Updated.','docdirect');
+                $json['message']	= esc_html__('Schedules Updated.','docdirect_api');
                 return new WP_REST_Response($json, 200);
-            }
-            else
-            {
+            } else {
                 $json	= array();
-                $json['type']	= 'error';
-                $json['message']	= esc_html__('Oops! user_id and timeformat both needed.','docdirect');
-                return new WP_REST_Response($json, 200);
+                $json['type']		= 'error';
+                $json['message']	= esc_html__('Oops! user_id and timeformat both needed.','docdirect_api');
+                return new WP_REST_Response($json, 203);
             }
 
         }

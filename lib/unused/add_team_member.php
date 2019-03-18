@@ -48,14 +48,14 @@ if (!class_exists('DocdirectAppAddTeamRoutes')) {
 
                     $json	= array();
                     $json['type']	= 'success';
-                    $json['message']	= esc_html__('Successfully! added to your team members','docdirect');
+                    $json['message']	= esc_html__('Successfully! added to your team members','docdirect_api');
                     echo json_encode($json);
                     die();
                 }
 
                 $json	= array();
                 $json['type']	= 'error';
-                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect');
+                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect_api');
                 echo json_encode($json);
                 die();
 

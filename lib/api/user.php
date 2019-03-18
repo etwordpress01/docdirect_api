@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to manage users
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectApp_User_Route')) {
 
     class DocdirectApp_User_Route extends WP_REST_Controller{
@@ -101,11 +112,11 @@ if (!class_exists('DocdirectApp_User_Route')) {
 
 			if (empty($user_input)) {
 				$json['type'] = 'error';
-				$json['message'] = esc_html__('Please add email address.', 'docdirect');
+				$json['message'] = esc_html__('Please add email address.', 'docdirect_api');
 				return new WP_REST_Response($json, 203);
 			} else if (!is_email($user_input)) {
 				$json['type'] = "error";
-				$json['message'] = esc_html__("Please add a valid email address.", 'docdirect');
+				$json['message'] = esc_html__("Please add a valid email address.", 'docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
 
@@ -114,7 +125,7 @@ if (!class_exists('DocdirectApp_User_Route')) {
 				//the condition $user_data->caps[administrator] == 1 to prevent password change for admin users.
 				//if you prefer to offer password change for admin users also, just delete that condition.
 				$json['type'] = "error";
-				$json['message'] = esc_html__("Invalid E-mail address!", 'docdirect');
+				$json['message'] = esc_html__("Invalid E-mail address!", 'docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
 
@@ -147,7 +158,7 @@ if (!class_exists('DocdirectApp_User_Route')) {
 			}
 
 			$json['type'] = "success";
-			$json['message'] = esc_html__("A link has been sent, please check your email.", 'docdirect');
+			$json['message'] = esc_html__("A link has been sent, please check your email.", 'docdirect_api');
 			return new WP_REST_Response($json, 203);
 
         }
@@ -172,7 +183,7 @@ if (!class_exists('DocdirectApp_User_Route')) {
 				
 				if (is_wp_error($user)) {
                     $json['type']	= 'error';
-                    $json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+                    $json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 					return new WP_REST_Response($json, 203);
                 } else {
 					

@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to update security settings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectSecuritySettingRoutes')) {
 
     class DocdirectSecuritySettingRoutes extends WP_REST_Controller{
@@ -40,9 +51,11 @@ if (!class_exists('DocdirectSecuritySettingRoutes')) {
                 if(!empty($request['old_password'])){
                     $old_passowrd	= sanitize_text_field( $request['old_password'] );
                 }
+				
                 if(!empty($request['new_password'])){
                     $new_passowrd	= sanitize_text_field( $request['new_password'] );
                 }
+				
                 if(!empty($request['confirm_password'])){
                     $confirm_password	= sanitize_text_field( $request['confirm_password'] );
                 }
@@ -53,29 +66,29 @@ if (!class_exists('DocdirectSecuritySettingRoutes')) {
 
                     if ( empty( $new_passowrd ) || empty( $confirm_password ) ) {
                         $json['type']		=  'error';
-                        $json['message']		= esc_html__('Please add your new password.','docdirect');
+                        $json['message']		= esc_html__('Please add your new password.','docdirect_api');
                         return new WP_REST_Response($json, 203);
                     }
 
                     if ( $new_passowrd  === $confirm_password ) {
                         wp_update_user( array( 'ID' => $user_identity, 'user_pass' => esc_attr( $new_passowrd ) ) );
                         $json['type']		=  'success';
-                        $json['message']		= esc_html__('Password Updated.','docdirect');
+                        $json['message']		= esc_html__('Password Updated.','docdirect_api');
 						return new WP_REST_Response($json, 200);
                     } else {
                         $json['type']		=  'error';
-                        $json['message']		= esc_html__('The passwords you entered do not match. Your password was not updated', 'docdirect');
+                        $json['message']		= esc_html__('The passwords you entered do not match. Your password was not updated', 'docdirect_api');
 						return new WP_REST_Response($json, 203);
                     }
 					
                 } else{
                     $json['type']		=  'error';
-                    $json['message']		= esc_html__('Old Password doesn\'t match the existing password', 'docdirect');
+                    $json['message']		= esc_html__('Old Password doesn\'t match the existing password', 'docdirect_api');
 					return new WP_REST_Response($json, 200);
                 }
             } else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
         }

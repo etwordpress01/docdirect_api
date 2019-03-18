@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to view answers
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectAppViewQuestionAnswersRoutes')) {
 
     class DocdirectAppViewQuestionAnswersRoutes extends WP_REST_Controller{
@@ -60,7 +71,7 @@ if (!class_exists('DocdirectAppViewQuestionAnswersRoutes')) {
                    array('width'=>150,'height'=>150) //size width,height
                 );   
                 $pfx_date           = get_the_date( 'Y-m-d', $post->ID );
-                $date               = human_time_diff(strtotime($pfx_date), current_time('timestamp')) .'&nbsp;'. esc_html__('ago', 'docdirect'); 
+                $date               = human_time_diff(strtotime($pfx_date), current_time('timestamp')) .'&nbsp;'. esc_html__('ago', 'docdirect_api'); 
                 $total_votes        = get_post_meta($post->id, 'total_votes', true);
                 $total_votes        = !empty( $total_votes ) ? $total_votes : 0;
                 $data['user_name']  = $user_name;
@@ -73,12 +84,12 @@ if (!class_exists('DocdirectAppViewQuestionAnswersRoutes')) {
             }
           } else {
             $json['type']     = 'success';
-            $json['message']  = esc_html__('No Answers found'. 'docdirect');
+            $json['message']  = esc_html__('No Answers found'. 'docdirect_api');
 			return new WP_REST_Response($json, 200);
           }    
         } else {
           $json['type']     = 'error';
-          $json['message']  = esc_html__('Question ID is required', 'docdirect');
+          $json['message']  = esc_html__('Question ID is required', 'docdirect_api');
 		  return new WP_REST_Response($json, 203);
         }
       }

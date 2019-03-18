@@ -49,12 +49,12 @@ if (!class_exists('DocdirectUserServicesListingsRoutes')) {
                     return new WP_REST_Response($new_list, 200);                   
                 } else {
                     $json['type'] = 'success';
-                    $json['message'] = esc_html__('User has booking services yet', 'docdirect');
+                    $json['message'] = esc_html__('User has booking services yet', 'docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }                                                                             
             } 
             $json['type']       = 'error';
-            $json['message']    = esc_html__('User ID needed', 'docdirect');
+            $json['message']    = esc_html__('User ID needed', 'docdirect_api');
             return new WP_REST_Response($json, 200);           
         }
     }

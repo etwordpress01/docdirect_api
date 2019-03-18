@@ -157,7 +157,7 @@ if (!class_exists('DocdirectSubmitProfileSettingRoutes')) {
 
                 do_action('docdirect_do_update_profile_settings', $_POST); //Save custom data
                 $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+                $json['message'] = esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);
 
             }

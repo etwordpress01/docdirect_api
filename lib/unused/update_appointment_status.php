@@ -43,7 +43,7 @@ if (!class_exists('DocdirectUpdateAppointmentStatusRoutes')) {
                     empty($post_id)
                 ) {
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect');
+                    $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect_api');
                     echo json_encode($json);
                     die;
                 }
@@ -62,7 +62,7 @@ if (!class_exists('DocdirectUpdateAppointmentStatusRoutes')) {
                     //Send status
                     $json['action_type'] = $value;
                     $json['type'] = 'success';
-                    $json['message'] = esc_html__('Appointment status has updated.', 'docdirect');
+                    $json['message'] = esc_html__('Appointment status has updated.', 'docdirect_api');
                     echo json_encode($json);
                     die;
 
@@ -80,7 +80,7 @@ if (!class_exists('DocdirectUpdateAppointmentStatusRoutes')) {
                     //Return status
                     $json['action_type'] = $value;
                     $json['type'] = 'success';
-                    $json['message'] = esc_html__('Appointment has been cancelled.', 'docdirect');
+                    $json['message'] = esc_html__('Appointment has been cancelled.', 'docdirect_api');
                     echo json_encode($json);
                     die;
                 }

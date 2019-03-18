@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to save expeience
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUpdateExperienceSettingRoutes')) {
 
     class DocdirectUpdateExperienceSettingRoutes extends WP_REST_Controller
@@ -48,7 +59,7 @@ if (!class_exists('DocdirectUpdateExperienceSettingRoutes')) {
                     || empty( $request['description'] ) ) {
 
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('All fields are required', 'docdirect');
+                    $json['message'] = esc_html__('All fields are required', 'docdirect_api');
                     return new WP_REST_Response($json, 203);  
                 }
 
@@ -67,11 +78,11 @@ if (!class_exists('DocdirectUpdateExperienceSettingRoutes')) {
                 update_user_meta($user_identity, 'experience', $user_data);
                 
                 $json['type']       = 'success';
-                $json['message']    = esc_html__('Settings saved.', 'docdirect');
+                $json['message']    = esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);       
             } else{
 				$json['type'] = 'error';
-				$json['message'] = esc_html__('User ID is required', 'docdirect');
+				$json['message'] = esc_html__('User ID is required', 'docdirect_api');
 				return new WP_REST_Response($json, 203);    
 			}
               

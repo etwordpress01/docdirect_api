@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * APP API to get languages
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectAppLanguagesRoute')) {
 
     class DocdirectAppLanguagesRoute extends WP_REST_Controller
@@ -46,7 +56,7 @@ if (!class_exists('DocdirectAppLanguagesRoute')) {
                 return new WP_REST_Response($items, 200);
             } else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
         }

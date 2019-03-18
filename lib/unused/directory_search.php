@@ -483,14 +483,14 @@ if (!class_exists('DocdirectAppDirectorySearchRoute')) {
                 $total_users	= $total_query->total_users;
 
                 if(!empty( $geo_location ) && !empty( $directory_type )){
-                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found for','docdirect').'&nbsp;:&nbsp;<em>'.get_the_title($directory_type).'&nbsp;in&nbsp;'. $geo_location.'</em>';
+                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found for','docdirect_api').'&nbsp;:&nbsp;<em>'.get_the_title($directory_type).'&nbsp;in&nbsp;'. $geo_location.'</em>';
                 } else if( empty( $geo_location )&& !empty( $directory_type )){
-                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found for','docdirect').'&nbsp;:&nbsp;<em>'.get_the_title($directory_type).'</em>';
+                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found for','docdirect_api').'&nbsp;:&nbsp;<em>'.get_the_title($directory_type).'</em>';
 
                 } else if( !empty( $geo_location )&& empty( $directory_type )){
-                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found in','docdirect').'<em>&nbsp;'. $geo_location.'</em>';
+                    $found_title	= $total_users.'&nbsp;'.esc_html__('matche(s) found in','docdirect_api').'<em>&nbsp;'. $geo_location.'</em>';
                 } else {
-                    $found_title	= $total_users . esc_html__('&nbsp;matches found','docdirect');
+                    $found_title	= $total_users . esc_html__('&nbsp;matches found','docdirect_api');
                 }
 
 

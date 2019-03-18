@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to add review
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectCreateReviewRoutes')) {
 
     class DocdirectCreateReviewRoutes extends WP_REST_Controller{
@@ -42,7 +53,7 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
 
                 if( isset( $is_verified ) && $is_verified != 'on' ) {
                     $json['type']			= 'error';
-                    $json['message']		= esc_html__('You are not a verified user, You can\'t make a review. Please contact to administrator.','docdirect');
+                    $json['message']		= esc_html__('You are not a verified user, You can\'t make a review. Please contact to administrator.','docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }
 
@@ -62,7 +73,7 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                 $reviews_count = $reviews_query->post_count;
                 if( isset( $reviews_count ) && $reviews_count > 0 ){
                     $json['type']		= 'error';
-                    $json['message']	= esc_html__('You have already submit a review.', 'docdirect');
+                    $json['message']	= esc_html__('You have already submit a review.', 'docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }
 
@@ -113,10 +124,10 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
 
                     $json['type']	   = 'success';
                     if( isset( $dir_review_status ) && $dir_review_status == 'publish' ) {
-                        $json['message']	= esc_html__('Your review published successfully.','docdirect');
+                        $json['message']	= esc_html__('Your review published successfully.','docdirect_api');
                         $json['html']	   = 'refresh';
                     } else{
-                        $json['message']	= esc_html__('Your review is submitted successfully, it will be published after approval.','docdirect');
+                        $json['message']	= esc_html__('Your review is submitted successfully, it will be published after approval.','docdirect_api');
                         $json['html']	   = '';
                     }
 
@@ -144,17 +155,17 @@ if (!class_exists('DocdirectCreateReviewRoutes')) {
                     }
 					
 					$json['type']		= 'success';
-					$json['message']	 = esc_html__('Review added.','docdirect');
+					$json['message']	 = esc_html__('Review added.','docdirect_api');
 					return new WP_REST_Response($json, 200);
 
                 } else{
                     $json['type']		= 'error';
-                    $json['message']	 = esc_html__('Please fill all the fields.','docdirect');
+                    $json['message']	 = esc_html__('Please fill all the fields.','docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }
             } else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
         }

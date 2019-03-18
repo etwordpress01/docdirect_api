@@ -33,10 +33,6 @@ if (!class_exists('DocdirectAppDeleteDeactivateAccountRoutes')) {
             if(!empty($request['user_id']) && !empty($request['message']) ){
                 $user_identity	=$request['user_id'];
 
-                if( function_exists('docdirect_is_demo_site') ) {
-                    docdirect_is_demo_site();
-                }; //if demo site then prevent
-
                 $json	=  array();
                 $action				= sanitize_text_field( $request['process'] );
                 $old_password		= sanitize_text_field( $request['old_password'] );
@@ -48,7 +44,7 @@ if (!class_exists('DocdirectAppDeleteDeactivateAccountRoutes')) {
                 if( isset( $action ) && $action === 'activateme' ){
                     update_user_meta( $user->data->ID, 'profile_status', 'active' );
                     $json['type']		=  'success';
-                    $json['message']		= esc_html__('Account activated..','docdirect');
+                    $json['message']		= esc_html__('Account activated..','docdirect_api');
                     echo json_encode($json);
                     die;
                 }
@@ -57,14 +53,14 @@ if (!class_exists('DocdirectAppDeleteDeactivateAccountRoutes')) {
 
                 if ( empty( $message ) ) {
                     $json['type']		=  'error';
-                    $json['message']		= esc_html__('Please add some description','docdirect');
+                    $json['message']		= esc_html__('Please add some description','docdirect_api');
                     echo json_encode($json);
                     exit;
                 }
 
                 if ( empty($old_password ) || empty( $confirm_password ) ) {
                     $json['type']		=  'error';
-                    $json['message']		= esc_html__('Please add your password and confirm password.','docdirect');
+                    $json['message']		= esc_html__('Please add your password and confirm password.','docdirect_api');
                     echo json_encode($json);
                     exit;
                 }
@@ -91,23 +87,23 @@ if (!class_exists('DocdirectAppDeleteDeactivateAccountRoutes')) {
 
 
                             $json['type']		=  'success';
-                            $json['message']		= esc_html__('Account deleted.','docdirect');
+                            $json['message']		= esc_html__('Account deleted.','docdirect_api');
 
                         } elseif( isset( $action ) && $action === 'deactivateme' ){
                             update_user_meta( $user->data->ID, 'profile_status', 'de-active' );
                             update_user_meta( $user->data->ID, 'deactivate_reason', $message );
 
                             $json['type']			=  'success';
-                            $json['message']		= esc_html__('Account de-activated.','docdirect');
+                            $json['message']		= esc_html__('Account de-activated.','docdirect_api');
                         }
 
                     } else {
                         $json['type']		=  'error';
-                        $json['message']		= esc_html__('The passwords you entered do not match.', 'docdirect');
+                        $json['message']		= esc_html__('The passwords you entered do not match.', 'docdirect_api');
                     }
                 } else{
                     $json['type']		=  'error';
-                    $json['message']		= esc_html__('Password not match.', 'docdirect');
+                    $json['message']		= esc_html__('Password not match.', 'docdirect_api');
                 }
 
                 echo json_encode($json);
@@ -115,7 +111,7 @@ if (!class_exists('DocdirectAppDeleteDeactivateAccountRoutes')) {
 
             }
              $json['type']		=  'error';
-             $json['message']		= esc_html__('Fields must not be empty.', 'docdirect');
+             $json['message']		= esc_html__('Fields must not be empty.', 'docdirect_api');
             echo json_encode($json);
             exit;
         }

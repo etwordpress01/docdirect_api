@@ -46,7 +46,7 @@ if (!class_exists('DocdirectUpdateUserServiceDataSettingRoutes')) {
                     || empty( $service_category )
                  ){
                     $json['type']   = 'error';
-                    $json['message']    = esc_html__('Please fill all the fields.','docdirect');
+                    $json['message']    = esc_html__('Please fill all the fields.','docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
                 
@@ -70,7 +70,7 @@ if (!class_exists('DocdirectUpdateUserServiceDataSettingRoutes')) {
                     $new_service[$key]['category']  = $service_category;
                     
                     $services   = array_merge($services,$new_service);
-                    $json['message']     = esc_html__('Service added successfully.','docdirect');
+                    $json['message']     = esc_html__('Service added successfully.','docdirect_api');
                 } else{          
                     $services = get_user_meta($user_identity , 'booking_services' , true);
                     $services   = empty( $services ) ? array() : $services;
@@ -81,14 +81,14 @@ if (!class_exists('DocdirectUpdateUserServiceDataSettingRoutes')) {
                     $services[$key]['title']    = $service_title;
                     $services[$key]['price']    = $service_price;
                     $services[$key]['category'] = $service_category;                    
-                    $json['message']    = esc_html__('Service updated successfully.','docdirect');
+                    $json['message']    = esc_html__('Service updated successfully.','docdirect_api');
                 }
                 
                 update_user_meta( $user_identity, 'booking_services', $services );
                 return new WP_REST_Response($json, 200);
             } 
             $json['type']       = 'error';
-            $json['message']    = esc_html__('User ID needed', 'docdirect');
+            $json['message']    = esc_html__('User ID needed', 'docdirect_api');
             return new WP_REST_Response($json, 200);           
         }
     }

@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to save specialities
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUpdateUserSpecialitySettingRoutes')) {
 
     class DocdirectUpdateUserSpecialitySettingRoutes extends WP_REST_Controller
@@ -35,28 +46,47 @@ if (!class_exists('DocdirectUpdateUserSpecialitySettingRoutes')) {
             $json = array();
             if(!empty($request['user_id'])) {
                 $user_identity = $request['user_id'];                
-                $user_data = get_user_meta($user_identity, 'user_profile_specialities', true);
-                $user_data = !empty( $user_data ) ? $user_data : array();
+                $specialities = get_user_meta($user_identity, 'user_profile_specialities', true);
+                $specialities = !empty( $specialities ) ? $specialities : array();
                 
-                //Form validation    
-                if( empty( $request['slug'] ) || empty( $request['name'] )){
-                    $json['type']       = 'error';
-                    $json['message']    = esc_html__('Speciality slug and name needed', 'docdirect');
-                    return new WP_REST_Response($json, 200);
-                }
+				//Specialities
+				$db_directory_type	 = get_user_meta( $user_identity, 'directory_type', true);
+				if( !empty( $db_directory_type ) ) {
+					$specialities_list	 = docdirect_prepare_taxonomies('directory_type','specialities',0,'array');
+				}
 
-                //Speciality 
-                $slug  = $request['slug'];
-                $name  = $request['name'];
-                $user_data[$slug] = $name;                                    
-                update_user_meta($user_identity, 'user_profile_specialities', $user_data);   
+				$submitted_specialities	= !empty( $request['specialities'] ) ? $request['specialities'] : array();
 
-                $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+				//limit specialities
+				if (function_exists('fw_get_db_settings_option')) {
+					$speciality_limit 		= fw_get_db_settings_option('speciality_limit');
+				}
+				
+				$speciality_limit		= !empty( $speciality_limit ) ? $speciality_limit : '50';
+				$submitted_specialities	= array_slice($submitted_specialities, 0, $speciality_limit);
+
+				if( !empty( $specialities_list ) ){
+					$counter	= 0;
+					foreach( $specialities_list as $key => $speciality ){
+						if( isset( $submitted_specialities ) 
+							&& is_array( $submitted_specialities ) 
+							&& in_array( $speciality->slug, $submitted_specialities ) 
+						 ){
+							$specialities[$speciality->slug]	= $speciality->name;
+						}
+
+						$counter++;
+					}
+				}
+
+				update_user_meta( $user_identity, 'user_profile_specialities', $specialities ); 
+
+                $json['type'] 	 = 'success';
+                $json['message'] = esc_html__('Specialities has been updated.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);
             } else{
 				$json['type']       = 'error';
-				$json['message']    = esc_html__('User ID needed', 'docdirect');
+				$json['message']    = esc_html__('User ID is required', 'docdirect_api');
 				return new WP_REST_Response($json, 203);           
 			}
         }

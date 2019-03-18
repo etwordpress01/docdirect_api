@@ -1,6 +1,15 @@
 <?php
-require_once( ABSPATH . 'wp-admin/includes/file.php' );
-require_once( ABSPATH . 'wp-admin/includes/image.php' );
+/**
+ * APP API to Create/Update Article
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectCreateArticlesRoutes')) {
 
     class DocdirectCreateArticlesRoutes extends WP_REST_Controller
@@ -49,11 +58,11 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
 
                 if (empty($request['article_title'])) {
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('Title field should not be empty.', 'docdirect');
+                    $json['message'] = esc_html__('Title field should not be empty.', 'docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
 
-                $title          = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect');
+                $title          = !empty($request['article_title']) ? esc_attr($request['article_title']) : esc_html__('unnamed', 'docdirect_api');
                 $article_detail = force_balance_tags($request['article_detail']);
                 
 				//upload image
@@ -82,10 +91,10 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
 
                     if (isset($approve_articles) && $approve_articles === 'need_approval') {
                         $status = 'pending';
-                        $json['message'] = esc_html__('Your article has submitted and will be publish after the review.', 'docdirect');
+                        $json['message'] = esc_html__('Your article has submitted and will be publish after the review.', 'docdirect_api');
                     } else {
                         $status = 'publish';
-                        $json['message'] = esc_html__('Article added successfully.', 'docdirect');
+                        $json['message'] = esc_html__('Article added successfully.', 'docdirect_api');
                     }
 
                     $article_post = array(
@@ -156,22 +165,22 @@ if (!class_exists('DocdirectCreateArticlesRoutes')) {
                             wp_delete_attachment($pre_attachment_id, true);
                         }
 
-                        $json['message'] = esc_html__('Article updated successfully.', 'docdirect');
+                        $json['message'] = esc_html__('Article updated successfully.', 'docdirect_api');
 						$json['type'] = 'success';
                         return new WP_REST_Response($json, 200);
                     } else {
                         $json['type'] = 'error';
-                        $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect');
+                        $json['message'] = esc_html__('Some error occur, please try again later.', 'docdirect_api');
                         return new WP_REST_Response($json, 203);
                     }
                 } else {
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('Article type needed, please try again later.', 'docdirect');
+                    $json['message'] = esc_html__('Article type needed, please try again later.', 'docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }               
             } else {
                 $json['type'] = 'error';
-                $json['message'] = esc_html__('User ID is needed', 'docdirect');
+                $json['message'] = esc_html__('User ID is needed', 'docdirect_api');
                 return new WP_REST_Response($json, 203);
             }
         }

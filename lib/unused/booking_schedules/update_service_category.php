@@ -44,7 +44,7 @@ if (!class_exists('DocdirectUpdateServiceCategorySettingRoutes')) {
                 //Form validation    
                 if( empty( $request['title'] ) ){
                     $json['type']       = 'error';
-                    $json['message']    = esc_html__('Kindly add category title', 'docdirect');
+                    $json['message']    = esc_html__('Kindly add category title', 'docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
                 
@@ -64,11 +64,11 @@ if (!class_exists('DocdirectUpdateServiceCategorySettingRoutes')) {
                 update_user_meta( $user_identity, 'services_cats', $user_data );
                               
                 $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+                $json['message'] = esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);
             } 
             $json['type']       = 'error';
-            $json['message']    = esc_html__('User ID needed', 'docdirect');
+            $json['message']    = esc_html__('User ID needed', 'docdirect_api');
             return new WP_REST_Response($json, 200);           
         }
     }

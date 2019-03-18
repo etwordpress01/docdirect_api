@@ -49,12 +49,12 @@ if (!class_exists('DocdirectAppQuestionVoteRoutes')) {
                     do_action('fw_remove_user_from_votes',$id);
                     $count--;
                     update_post_meta($id, $db_key, $count);
-                    $json['message'] = esc_html__('Your vote has removed', 'docdirect');
+                    $json['message'] = esc_html__('Your vote has removed', 'docdirect_api');
                 } else{
                     do_action('fw_add_user_to_votes',$id);
                     $count++;
                     update_post_meta($id, $db_key, $count);
-                    $json['message'] = esc_html__('Your vote has update', 'docdirect');
+                    $json['message'] = esc_html__('Your vote has update', 'docdirect_api');
                 }
 
                 $json['vote'] = $count;

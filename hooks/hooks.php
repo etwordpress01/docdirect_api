@@ -3,8 +3,8 @@
 /**
  *
  * @package   DocdirectApp Core
- * @author    themographics
- * @link      https://themeforest.net/user/themographics/portfolio
+ * @author    amentotech
+ * @link      https://themeforest.net/user/amentotech/portfolio
  * @since 1.0
  */
 

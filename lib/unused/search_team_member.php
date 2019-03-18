@@ -38,7 +38,7 @@ if (!class_exists('DocdirectAppSearchTeamMemberRoutes')) {
                 $json = array();
                 if (!is_email($s)) {
                     $json['type'] = 'error';
-                    $json['msg'] = esc_html__('Please add valid email ID', 'docdirect');
+                    $json['msg'] = esc_html__('Please add valid email ID', 'docdirect_api');
                     echo json_encode($json);
                     die;
                 }

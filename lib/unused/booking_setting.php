@@ -85,7 +85,7 @@ if (!class_exists('DocdirectBookingSettingRoutes')) {
                 }
 				
                 $json['type'] = 'success';
-                $json['message'] = esc_html__('Booking settings updated.','docdirect');
+                $json['message'] = esc_html__('Booking settings updated.','docdirect_api');
 
                 echo json_encode($json);
                 exit;

@@ -6,7 +6,7 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://themeforest.net/user/themographics/portfolio
+ * @link       https://themeforest.net/user/amentotech/portfolio
  * @since      1.0.0
  *
  * @package    DocdirectApp
@@ -22,7 +22,7 @@
  * @since      1.0.0
  * @package    DocdirectApp
  * @subpackage DocdirectApp/includes
- * @author     Themographics <themographics@gmail.com>
+ * @author     Amento Tech <theamentotech@gmail.com>
  */
 class DocdirectApp_i18n {
 

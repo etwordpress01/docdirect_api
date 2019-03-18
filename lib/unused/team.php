@@ -75,8 +75,10 @@ if (!class_exists('DocdirectAppTeamRoutes')) {
                         $items[] = $item;
                     }
                 }
+				
+				return new WP_REST_Response($items, 200);
             }
-            return new WP_REST_Response($items, 200);
+            
         }
 
     }

@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to save social settings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUpdateSocialSettingRoutes')) {
 
     class DocdirectUpdateSocialSettingRoutes extends WP_REST_Controller
@@ -42,7 +53,7 @@ if (!class_exists('DocdirectUpdateSocialSettingRoutes')) {
                 //Form Validation
                 if( empty( $request['name'] ) || empty( $request['url'] ) ){
                     $json['type'] = 'error';
-                    $json['message'] = esc_html__('Name and URL needed', 'docdirect');
+                    $json['message'] = esc_html__('Name and URL needed', 'docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
 
@@ -52,12 +63,12 @@ if (!class_exists('DocdirectUpdateSocialSettingRoutes')) {
                
                 update_user_meta( $user_identity, $key, esc_url( $value ) );               
                 $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+                $json['message'] = esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200); 
             }
 
             $json['type']       = 'error';
-            $json['message']    = esc_html__('user_id Needed.', 'docdirect');
+            $json['message']    = esc_html__('user_id Needed.', 'docdirect_api');
             return new WP_REST_Response($json, 200); 
         }
     }

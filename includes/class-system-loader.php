@@ -3,7 +3,7 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       https://themeforest.net/user/themographics/portfolio
+ * @link       https://themeforest.net/user/amentotech/portfolio
  * @since      1.0.0
  *
  * @package    DocdirectApp
@@ -19,7 +19,7 @@
  *
  * @package    DocdirectApp
  * @subpackage DocdirectApp/includes
- * @author     Themographics <themographics@gmail.com>
+ * @author     Amento Tech <theamentotech@gmail.com>
  */
 class DocdirectApp_Loader {
 

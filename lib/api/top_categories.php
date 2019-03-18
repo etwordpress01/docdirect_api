@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to get top categories
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 
     class DocdirectAppTopCategoryRoutes extends WP_REST_Controller{
@@ -30,7 +41,8 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
          * @return WP_Error|WP_REST_Response
          */
         public function get_parent_categories($request) {
-            $args = array('posts_per_page' => '-1',
+			$show	= !empty( $request['show'] ) ? $request['show'] : -1;
+            $args = array('posts_per_page' => $show,
                 'post_type' => 'directory_type',
                 'post_status' => 'publish',
                 'suppress_filters' => false
@@ -64,7 +76,7 @@ if (!class_exists('DocdirectAppTopCategoryRoutes')) {
 				return new WP_REST_Response($items, 200);
 			}  else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('No categories found.','docdirect');
+				$json['message']	= esc_html__('No categories found.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
 

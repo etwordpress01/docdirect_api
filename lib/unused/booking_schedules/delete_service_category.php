@@ -36,7 +36,7 @@ if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
                 $posted_key	 = sanitize_title($request['key']);
                 if( empty( $posted_key ) ){
                     $json['type']	= 'error';
-                    $json['message']	= esc_html__('Provide category key to remove','docdirect');
+                    $json['message']	= esc_html__('Provide category key to remove','docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
 
@@ -50,7 +50,7 @@ if (!class_exists('DocdirectAppDeleteServiceCategoryRoutes')) {
                 update_user_meta( $user_identity, 'services_cats', $services_cats );
 
                 $json['message_type']	 = 'success';
-                $json['message']  = esc_html__('Category deleted successfully.','docdirect');
+                $json['message']  = esc_html__('Category deleted successfully.','docdirect_api');
                 return new WP_REST_Response($json, 200);
             }
         }

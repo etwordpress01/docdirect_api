@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to get time slots for bookings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectGetBookingTimeSlotsRoutes')) {
 
     class DocdirectGetBookingTimeSlotsRoutes extends WP_REST_Controller
@@ -38,7 +49,7 @@ if (!class_exists('DocdirectGetBookingTimeSlotsRoutes')) {
                 $slot_date  = sanitize_text_field( $request['slot_date'] );
                 if( empty( $slot_date ) ) {
                     $json['type']       = 'error';
-                    $json['message']    = esc_html__('Date should not be empty', 'docdirect');
+                    $json['message']    = esc_html__('Date should not be empty', 'docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }
 				
@@ -188,16 +199,16 @@ if (!class_exists('DocdirectGetBookingTimeSlotsRoutes')) {
                     } 
 					
 					$json['type']       = 'success';
-                	$json['message']    = esc_html__('Slots found', 'docdirect');
+                	$json['message']    = esc_html__('Slots found', 'docdirect_api');
                     return new WP_REST_Response($slots, 200);  
                 }  else {
                     $json['type']       = 'error';
-                    $json['message']    = esc_html__('No slots found', 'docdirect');
+                    $json['message']    = esc_html__('No slots found', 'docdirect_api');
                     return new WP_REST_Response($json, 204);   
                 }             
             } else {
                 $json['type']       = 'error';
-                $json['message']    = esc_html__('Make sure you are logged in', 'docdirect');
+                $json['message']    = esc_html__('Make sure you are logged in', 'docdirect_api');
                 return new WP_REST_Response($json, 400);           
             }
         }

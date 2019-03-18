@@ -45,14 +45,14 @@ if (!class_exists('DocdirectAppRemoveTeamRoutes')) {
 
                     $json	= array();
                     $json['type']	= 'success';
-                    $json['message']	= esc_html__('Successfully! removed from your teams','docdirect');
+                    $json['message']	= esc_html__('Successfully! removed from your teams','docdirect_api');
                     echo json_encode($json);
                     die();
                 }
 
                 $json	= array();
                 $json['type']	= 'error';
-                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect');
+                $json['message']	= esc_html__('Oops! something is going wrong.','docdirect_api');
                 echo json_encode($json);
                 die();
 

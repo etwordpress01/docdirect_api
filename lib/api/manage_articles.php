@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to get Articles
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectManageArticlesRoutes')) {
 
     class DocdirectManageArticlesRoutes extends WP_REST_Controller{

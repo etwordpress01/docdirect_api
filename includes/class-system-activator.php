@@ -3,7 +3,7 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://themeforest.net/user/themographics/portfolio
+ * @link       https://themeforest.net/user/amentotech/portfolio
  * @since      1.0.0
  *
  * @package    DocdirectApp
@@ -18,7 +18,7 @@
  * @since      1.0.0
  * @package    Elevator
  * @subpackage DocdirectApp/includes
- * @author     Themographics <themographics@gmail.com>
+ * @author     Amento Tech <theamentotech@gmail.com>
  */
 class DocdirectApp_Activator {
 

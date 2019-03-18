@@ -3,7 +3,7 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://themeforest.net/user/themographics/portfolio
+ * @link       https://themeforest.net/user/amentotech/portfolio
  * @since      1.0.0
  *
  * @package    DocdirectApp
@@ -18,7 +18,7 @@
  *
  * @package    DocdirectApp
  * @subpackage DocdirectApp/admin
- * @author     Themographics <themographics@gmail.com>
+ * @author     Amento Tech <theamentotech@gmail.com>
  */
 class DocdirectApp_Admin {
 

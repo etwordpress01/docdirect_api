@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to update awards
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUpdateAwardsSettingRoutes')) {
 
     class DocdirectUpdateAwardsSettingRoutes extends WP_REST_Controller
@@ -43,7 +54,7 @@ if (!class_exists('DocdirectUpdateAwardsSettingRoutes')) {
                 //Form validation    
                 if( empty( $request['name'] ) || empty( $request['date'] ) || empty( $request['description'] ) ){
                     $json['type']       = 'error';
-                    $json['message']    = esc_html__('Kindly fill all fields', 'docdirect');
+                    $json['message']    = esc_html__('Kindly fill all fields', 'docdirect_api');
                     return new WP_REST_Response($json, 203);
                 }
 
@@ -58,11 +69,11 @@ if (!class_exists('DocdirectUpdateAwardsSettingRoutes')) {
                 $user_data[] = $awards;
                 update_user_meta($user_identity, 'awards', $user_data);                
                 $json['type'] = 'success';
-                $json['message'] = esc_html__('Settings saved.', 'docdirect');
+                $json['message'] = esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);
             }  else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}  
         }

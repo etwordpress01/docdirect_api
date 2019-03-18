@@ -36,7 +36,7 @@ if (!class_exists('DocdirectAppDeleteUserServiceRoutes')) {
                 $posted_key	 = sanitize_title($request['key']);
                 if( empty( $posted_key ) ){
                     $json['type']	= 'error';
-                    $json['message']	= esc_html__('Provide service key to remove','docdirect');
+                    $json['message']	= esc_html__('Provide service key to remove','docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }                    
                 
@@ -46,11 +46,11 @@ if (!class_exists('DocdirectAppDeleteUserServiceRoutes')) {
                 unset( $booking_services[$posted_key] );        
                 update_user_meta( $user_identity, 'booking_services', $booking_services );             
                 $json['message_type']	 = 'success';
-                $json['message']  = esc_html__('Service deleted successfully.','docdirect');
+                $json['message']  = esc_html__('Service deleted successfully.','docdirect_api');
                 return new WP_REST_Response($json, 200);
             } else {
                 $json['message_type']    = 'error';
-                $json['message']  = esc_html__('User ID needed','docdirect');
+                $json['message']  = esc_html__('User ID needed','docdirect_api');
                 return new WP_REST_Response($json, 200);
             }
         }

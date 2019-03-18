@@ -46,7 +46,7 @@ if (!class_exists('DocdirectAppSubmitClaimRoutes')) {
                 empty( $user_from )
             ) {
                 $json['type']	   = 'error';
-                $json['message']	= esc_html__('Please fill all the fields.','docdirect');
+                $json['message']	= esc_html__('Please fill all the fields.','docdirect_api');
                 echo json_encode($json);
                 die;
             }
@@ -96,7 +96,7 @@ if (!class_exists('DocdirectAppSubmitClaimRoutes')) {
 
 
             $json['type']	   = 'success';
-            $json['message']	= esc_html__('Your report received successfully.','docdirect');
+            $json['message']	= esc_html__('Your report received successfully.','docdirect_api');
             echo json_encode($json);
             die;
         }

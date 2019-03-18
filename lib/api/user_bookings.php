@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to list bookings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUserBookingsListingsRoutes')) {
 
     class DocdirectUserBookingsListingsRoutes extends WP_REST_Controller
@@ -124,13 +135,13 @@ if (!class_exists('DocdirectUserBookingsListingsRoutes')) {
                     return new WP_REST_Response($items, 200);
                 } else {
                     $json['type']       = 'success';
-                    $json['message']    = esc_html__('Nothing Found', 'docdirect');
+                    $json['message']    = esc_html__('Nothing Found', 'docdirect_api');
                     return new WP_REST_Response($json, 203); 
                 }
                                                                                           
             } else {
                 $json['type']       = 'error';
-                $json['message']    = esc_html__('User ID needed', 'docdirect');
+                $json['message']    = esc_html__('User ID needed', 'docdirect_api');
                 return new WP_REST_Response($json, 203); 
             }                 
         }

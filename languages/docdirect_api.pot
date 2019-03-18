@@ -1,0 +1,519 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Docdirect APP Configurations\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-27 07:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.2.0; wp-5.1"
+
+#: lib/unused/directory_search.php:493
+msgid "&nbsp;matches found"
+msgstr ""
+
+#: lib/api/user.php:161
+msgid "A link has been sent, please check your email."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:47
+msgid "Account activated.."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:97
+msgid "Account de-activated."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:90
+msgid "Account deleted."
+msgstr ""
+
+#: lib/api/get_providers.php:1018 lib/api/reviews.php:107
+#: lib/api/view_answers.php:74
+msgid "ago"
+msgstr ""
+
+#: lib/api/book_appointment.php:67 lib/api/update_experience_setting.php:62
+#: lib/api/update_price_setting.php:60
+msgid "All fields are required"
+msgstr ""
+
+#. Author of the plugin
+msgid "Amento Tech"
+msgstr ""
+
+#: lib/api/submit_answer.php:52
+msgid "Answer description area should not be empty."
+msgstr ""
+
+#: lib/api/submit_answer.php:96
+msgid "Answer submitted successfully."
+msgstr ""
+
+#: lib/api/approve_disapprove_appointment.php:86
+#: lib/unused/search_appointments.php:85
+#: lib/unused/update_appointment_status.php:83
+msgid "Appointment has been cancelled."
+msgstr ""
+
+#: lib/api/approve_disapprove_appointment.php:70
+msgid "Appointment status has been updated."
+msgstr ""
+
+#: lib/unused/search_appointments.php:67
+#: lib/unused/update_appointment_status.php:65
+msgid "Appointment status has updated."
+msgstr ""
+
+#: lib/api/create_article.php:97
+msgid "Article added successfully."
+msgstr ""
+
+#: lib/api/delete_article.php:54
+msgid "Article deleted successfully."
+msgstr ""
+
+#: lib/api/create_article.php:178
+msgid "Article type needed, please try again later."
+msgstr ""
+
+#: lib/api/create_article.php:168
+msgid "Article updated successfully."
+msgstr ""
+
+#: lib/api/post_question.php:66
+msgid "Author ID required."
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:103
+msgid "banner image updated"
+msgstr ""
+
+#: lib/unused/booking_setting.php:88
+msgid "Booking settings updated."
+msgstr ""
+
+#: lib/unused/booking_schedules/delete_service_category.php:53
+msgid "Category deleted successfully."
+msgstr ""
+
+#: lib/api/send_mail.php:53
+msgid "Contact Form Received"
+msgstr ""
+
+#: lib/api/get_booking_time_slots.php:52
+msgid "Date should not be empty"
+msgstr ""
+
+#. Name of the plugin
+msgid "Docdirect APP Configurations"
+msgstr ""
+
+#: lib/api/send_mail.php:72
+msgid "Email address is not valid."
+msgstr ""
+
+#: lib/api/remove_favourite.php:62
+msgid "Favourite ID is required"
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:114
+msgid "Fields must not be empty."
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:147
+msgid "Gallery images updated"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://themeforest.net/user/amentotech"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://themeforest.net/user/amentotech/portfolio"
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:316
+msgid "Image upload failed"
+msgstr ""
+
+#: lib/api/user.php:128
+msgid "Invalid E-mail address!"
+msgstr ""
+
+#: lib/unused/booking_schedules/update_service_category.php:47
+msgid "Kindly add category title"
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:232 lib/api/update_awards_setting.php:57
+#: lib/api/update_qualification_setting.php:62
+msgid "Kindly fill all fields"
+msgstr ""
+
+#: lib/api/update_profile_languages.php:55
+msgid "Language key needed"
+msgstr ""
+
+#: lib/api/get_booking_time_slots.php:211
+msgid "Make sure you are logged in"
+msgstr ""
+
+#: lib/unused/directory_search.php:486 lib/unused/directory_search.php:488
+msgid "matche(s) found for"
+msgstr ""
+
+#: lib/unused/directory_search.php:491
+msgid "matche(s) found in"
+msgstr ""
+
+#: lib/api/send_mail.php:55
+msgid "Message Fail."
+msgstr ""
+
+#: lib/api/send_mail.php:54
+msgid "Message Sent."
+msgstr ""
+
+#: lib/api/update_social_setting.php:56
+msgid "Name and URL needed"
+msgstr ""
+
+#: lib/unused/current_package.php:50 lib/unused/current_package.php:52
+msgid "NILL"
+msgstr ""
+
+#: lib/api/categories.php:89 lib/api/top_categories.php:78
+msgid "No categories found."
+msgstr ""
+
+#: lib/api/insurance_list.php:57
+msgid "No insurance found."
+msgstr ""
+
+#: lib/api/get_booking_time_slots.php:206
+msgid "No slots found"
+msgstr ""
+
+#: lib/api/get_providers.php:575 lib/unused/favorite_listing.php:48
+msgid "No user is added in the favorite listing."
+msgstr ""
+
+#: lib/api/get_providers.php:549
+msgid "No user is added in the teams."
+msgstr ""
+
+#: lib/api/user_bookings.php:138
+msgid "Nothing Found"
+msgstr ""
+
+#: lib/api/security_setting.php:86
+msgid "Old Password doesn't match the existing password"
+msgstr ""
+
+#: lib/unused/add_team_member.php:58 lib/unused/remove_team_member.php:55
+msgid "Oops! something is going wrong."
+msgstr ""
+
+#: lib/api/update_schedule.php:51
+msgid "Oops! user_id and timeformat both needed."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:106
+msgid "Password not match."
+msgstr ""
+
+#: lib/api/security_setting.php:76
+msgid "Password Updated."
+msgstr ""
+
+#: lib/api/user.php:119
+msgid "Please add a valid email address."
+msgstr ""
+
+#: lib/api/user.php:115
+msgid "Please add email address."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:56
+msgid "Please add some description"
+msgstr ""
+
+#: lib/unused/search_team_member.php:41
+msgid "Please add valid email ID"
+msgstr ""
+
+#: lib/api/security_setting.php:69
+msgid "Please add your new password."
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:63
+msgid "Please add your password and confirm password."
+msgstr ""
+
+#: lib/api/send_mail.php:66
+msgid "Please fill all fields."
+msgstr ""
+
+#: lib/api/make_review.php:163 lib/unused/submit_claim.php:49
+#: lib/unused/booking_schedules/update_user_service.php:49
+msgid "Please fill all the fields."
+msgstr ""
+
+#: lib/api/get_providers.php:638
+msgid "Please provide api type."
+msgstr ""
+
+#: lib/api/approve_disapprove_appointment.php:54
+msgid "Please provide required information"
+msgstr ""
+
+#: lib/api/get_providers.php:540 lib/api/get_providers.php:566
+#: lib/unused/favorite_listing.php:39
+msgid "Please provide user id."
+msgstr ""
+
+#: lib/api/get_providers.php:596
+msgid "Please select category."
+msgstr ""
+
+#: lib/api/delete_article.php:58
+msgid "Post ID needed."
+msgstr ""
+
+#: lib/api/privacy_setting.php:73
+msgid "Privacy Settings Updated."
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:75
+msgid "profile image updated"
+msgstr ""
+
+#: lib/unused/booking_schedules/delete_service_category.php:39
+msgid "Provide category key to remove"
+msgstr ""
+
+#: lib/unused/booking_schedules/delete_user_service.php:39
+msgid "Provide service key to remove"
+msgstr ""
+
+#: lib/api/post_question.php:106
+msgid "Question added successfully."
+msgstr ""
+
+#: lib/api/post_question.php:59
+msgid "Question description area should not be empty."
+msgstr ""
+
+#: lib/api/view_answers.php:92
+msgid "Question ID is required"
+msgstr ""
+
+#: lib/api/submit_answer.php:61
+msgid "Question ID must not be empty."
+msgstr ""
+
+#: lib/api/post_question.php:52
+msgid "Question title should not be empty."
+msgstr ""
+
+#: lib/api/make_review.php:158
+msgid "Review added."
+msgstr ""
+
+#: lib/api/update_schedule.php:46
+msgid "Schedules Updated."
+msgstr ""
+
+#: lib/unused/booking_schedules/update_user_service.php:73
+msgid "Service added successfully."
+msgstr ""
+
+#: lib/unused/booking_schedules/delete_user_service.php:49
+msgid "Service deleted successfully."
+msgstr ""
+
+#: lib/unused/booking_schedules/update_user_service.php:84
+msgid "Service updated successfully."
+msgstr ""
+
+#: lib/api/update_awards_setting.php:72 lib/api/update_basic_setting.php:106
+#: lib/api/update_experience_setting.php:81 lib/api/update_price_setting.php:75
+#: lib/api/update_profile_languages.php:65
+#: lib/api/update_qualification_setting.php:81
+#: lib/api/update_social_setting.php:66 lib/unused/profile_setting.php:160
+#: lib/unused/booking_schedules/update_service_category.php:67
+msgid "Settings saved."
+msgstr ""
+
+#: lib/api/get_booking_time_slots.php:202
+msgid "Slots found"
+msgstr ""
+
+#: lib/api/get_providers.php:39
+msgid "Some error occur, please try again later"
+msgstr ""
+
+#: lib/api/book_appointment.php:158 lib/api/create_article.php:173
+#: lib/api/languages.php:59 lib/api/make_review.php:168
+#: lib/api/post_question.php:110 lib/api/profile_media_uploader.php:80
+#: lib/api/profile_media_uploader.php:108
+#: lib/api/profile_media_uploader.php:152 lib/api/reviews.php:123
+#: lib/api/security_setting.php:91 lib/api/send_mail.php:48
+#: lib/api/specialities.php:73 lib/api/submit_answer.php:100
+#: lib/api/update_awards_setting.php:76 lib/api/update_basic_setting.php:110
+#: lib/api/user-articles.php:111 lib/api/user.php:186
+#: lib/api/user_schedule.php:58 lib/api/wishlist.php:63
+#: lib/unused/search_appointments.php:48
+#: lib/unused/update_appointment_status.php:46
+msgid "Some error occur, please try again later."
+msgstr ""
+
+#: lib/api/update_speciality_setting.php:85
+msgid "Specialities has been updated."
+msgstr ""
+
+#: lib/api/wishlist.php:59
+msgid "Successfully! added to your favorites"
+msgstr ""
+
+#: lib/unused/add_team_member.php:51
+msgid "Successfully! added to your team members"
+msgstr ""
+
+#: lib/unused/remove_team_member.php:48
+msgid "Successfully! removed from your teams"
+msgstr ""
+
+#: lib/api/remove_favourite.php:58
+msgid "Successfully, removed from your wishlist"
+msgstr ""
+
+#: lib/unused/delete_deactivate_account.php:102
+msgid "The passwords you entered do not match."
+msgstr ""
+
+#: lib/api/security_setting.php:80
+msgid "The passwords you entered do not match. Your password was not updated"
+msgstr ""
+
+#. Description of the plugin
+msgid "This plugin is used for creating custom API for Docdirect Theme"
+msgstr ""
+
+#: lib/api/create_article.php:61
+msgid "Title field should not be empty."
+msgstr ""
+
+#: lib/api/create_article.php:65
+msgid "unnamed"
+msgstr ""
+
+#: lib/api/provider_services_listing.php:52
+#: lib/unused/booking_schedules/user_services_listings.php:52
+msgid "User has booking services yet"
+msgstr ""
+
+#: lib/unused/booking_schedules/service_category_listings.php:54
+msgid "User has no category to list"
+msgstr ""
+
+#: lib/api/provider_category_listings.php:55
+msgid "User has no category yet"
+msgstr ""
+
+#: lib/api/create_article.php:183
+msgid "User ID is needed"
+msgstr ""
+
+#: lib/api/update_experience_setting.php:85 lib/api/update_price_setting.php:79
+#: lib/api/update_profile_languages.php:69
+#: lib/api/update_qualification_setting.php:85
+#: lib/api/update_speciality_setting.php:89 lib/api/user-articles.php:118
+#: lib/unused/booking_schedules/service_category_listings.php:59
+msgid "User ID is required"
+msgstr ""
+
+#: lib/api/privacy_setting.php:78
+msgid "User id is required"
+msgstr ""
+
+#: lib/api/profile_media_uploader.php:321
+msgid "User ID missing"
+msgstr ""
+
+#: lib/api/approve_disapprove_appointment.php:91
+#: lib/api/provider_category_listings.php:60
+#: lib/api/provider_services_listing.php:57 lib/api/remove_favourite.php:67
+#: lib/api/user_bookings.php:144
+#: lib/unused/booking_schedules/delete_user_service.php:53
+#: lib/unused/booking_schedules/update_service_category.php:71
+#: lib/unused/booking_schedules/update_user_service.php:91
+#: lib/unused/booking_schedules/user_services_listings.php:57
+msgid "User ID needed"
+msgstr ""
+
+#: lib/api/get_providers.php:633 lib/api/user.php:233
+msgid "User ID required"
+msgstr ""
+
+#: lib/api/delete_article.php:63
+msgid "user_id is needed"
+msgstr ""
+
+#: lib/api/update_social_setting.php:71
+msgid "user_id Needed."
+msgstr ""
+
+#: lib/api/user.php:204
+msgid "You are logged in successfully"
+msgstr ""
+
+#: lib/api/user.php:228
+msgid "You are logged out successfully"
+msgstr ""
+
+#: lib/api/make_review.php:56
+msgid ""
+"You are not a verified user, You can't make a review. Please contact to "
+"administrator."
+msgstr ""
+
+#: lib/api/make_review.php:76
+msgid "You have already submit a review."
+msgstr ""
+
+#: lib/api/create_article.php:94
+msgid "Your article has submitted and will be publish after the review."
+msgstr ""
+
+#: lib/api/book_appointment.php:154
+msgid "Your boooking submitted succesfully."
+msgstr ""
+
+#: lib/unused/submit_claim.php:99
+msgid "Your report received successfully."
+msgstr ""
+
+#: lib/api/make_review.php:130
+msgid ""
+"Your review is submitted successfully, it will be published after approval."
+msgstr ""
+
+#: lib/api/make_review.php:127
+msgid "Your review published successfully."
+msgstr ""
+
+#: lib/unused/question_answer/vote.php:52
+msgid "Your vote has removed"
+msgstr ""
+
+#: lib/unused/question_answer/vote.php:57
+msgid "Your vote has update"
+msgstr ""

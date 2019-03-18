@@ -55,7 +55,7 @@ if (!class_exists('DocdirectAppUserScheduleRoutes')) {
 				return new WP_REST_Response($items, 200);
             } else{
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 				return new WP_REST_Response($json, 203);
 			}
         }

@@ -6,7 +6,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://themeforest.net/user/themographics/portfolio
+ * @link       https://themeforest.net/user/amentotech/portfolio
  * @since      1.0.0
  *
  * @package    DocdirectApp
@@ -24,7 +24,7 @@
  * @since      1.0.0
  * @package    DocdirectApp
  * @subpackage DocdirectApp/includes
- * @author     Themographics <themographics@gmail.com>
+ * @author     Amento Tech <theamentotech@gmail.com>
  */
 if (!class_exists('DocdirectApp_Core')) {
 

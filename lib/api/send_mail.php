@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to send email
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectAppSendContactMailRoutes')) {
 
     class DocdirectAppSendContactMailRoutes extends WP_REST_Controller{
@@ -34,14 +45,14 @@ if (!class_exists('DocdirectAppSendContactMailRoutes')) {
 
             if( empty( $recipient )){
                 $json['type']	= 'error';
-				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect');	
+				$json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');	
 				return new WP_REST_Response($json, 203);
             }
 
 			$bloginfo 		    = get_bloginfo();
-			$email_subject 		=  "(" . $bloginfo . ") " . esc_html__('Contact Form Received','docdirect');
-			$success_message 	= esc_html__('Message Sent.','docdirect');
-			$failure_message 	= esc_html__('Message Fail.','docdirect');
+			$email_subject 		=  "(" . $bloginfo . ") " . esc_html__('Contact Form Received','docdirect_api');
+			$success_message 	= esc_html__('Message Sent.','docdirect_api');
+			$failure_message 	= esc_html__('Message Fail.','docdirect_api');
 
 			$recipient 	=  sanitize_text_field( $_POST['email_to'] );
 
@@ -52,13 +63,13 @@ if (!class_exists('DocdirectAppSendContactMailRoutes')) {
 				|| empty( $_POST['user_description']  )
 			){
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Please fill all fields.','docdirect');	
+				$json['message']	= esc_html__('Please fill all fields.','docdirect_api');	
 				return new WP_REST_Response($json, 203);
 			}
 
 			if( ! is_email($_POST['useremail']) ){
 				$json['type']	= 'error';
-				$json['message']	= esc_html__('Email address is not valid.','docdirect');	
+				$json['message']	= esc_html__('Email address is not valid.','docdirect_api');	
 				return new WP_REST_Response($json, 203);
 			}
 

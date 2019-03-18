@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to set privacy settings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
 
     class DocdirectAppPrivacySettingRoutes extends WP_REST_Controller{
@@ -34,6 +45,7 @@ if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
             if (!empty($request['user_id'])) {
                 $user_identity	= $request['user_id'];
                 $json	= array();
+				$privacy_array	= array();
                 $privacy = array (
                     'appointments' => '',
                     'phone' => '',
@@ -41,29 +53,29 @@ if (!class_exists('DocdirectAppPrivacySettingRoutes')) {
                     'contact_form' => '',
                     'opening_hours' => ''
                 );
-
-                foreach ($privacy as $key => $value) {
-                    
-                }
-
-                if( !empty( $request['privacy'] ) ){
-                    update_user_meta( $user_identity, 'privacy', docdirect_sanitize_array( $request['privacy'] ) );
-                }
 				
-                //update privacy for search
-                if( !empty( $request['privacy'] ) ) {
-                    foreach( $request['privacy'] as $key => $value ) {
-                        update_user_meta( $user_identity, $key, esc_attr( $value ) );
+				//update privacy for search
+                if( !empty( $privacy ) ) {
+                    foreach( $privacy as $key => $value ) {
+						$data	= !empty( $request[$key] ) ? $request[$key] : 'off';
+                        update_user_meta( $user_identity, $key, esc_attr( $data ) );
+						$privacy_array[$key] = $data;
                     }
                 }
+				
+				
+                if( !empty( $privacy_array ) ){
+                    update_user_meta( $user_identity, 'privacy', $privacy_array );
+                }
+
 
                 $json['type']	= 'success';
-                $json['message']	= esc_html__('Privacy Settings Updated.','docdirect');
+                $json['message']	= esc_html__('Privacy Settings Updated.','docdirect_api');
                 return new WP_REST_Response($json, 200); 
 
             } else {
                 $json['type']   	= 'error';
-                $json['message']    = esc_html__('User id is required','docdirect'); 
+                $json['message']    = esc_html__('User id is required','docdirect_api'); 
 				return new WP_REST_Response($json, 203);
             }
             

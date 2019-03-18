@@ -50,13 +50,6 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					'number' => $show_users
 				);
 
-				//Verify user
-				$meta_query_args[] = array(
-					'key'     => 'verify_user',
-					'value'   => (string)$is_verify,
-					'compare' => '='
-				);
-
 				//featured users
 				$meta_query_args[] = array(
 					'key'     => 'user_featured',
@@ -101,7 +94,7 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 
 				//Category Search
 				if( !empty( $request['directory_type'] ) ) {
-					$directory_type = docdirect_get_page_by_slug( $request['directory_type'], 'directory_type','id' );
+					$directory_type = $request['directory_type'];
 				}
 
 				//insurance search
@@ -419,7 +412,7 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 					$meta_query_args[] = array(
 						'key' 		=> 'doc_sub_categories',
 						'value'   	=> $sub_category,
-						'compare' 	=> '=',
+						'compare' 	=> 'LIKE',
 					);
 					
 					/*$query_relation = array('relation' => 'OR',);
@@ -434,13 +427,6 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 
 					$meta_query_args[]	= array_merge( $query_relation,$subcategory_args );*/
 				}
-
-				//Verify user
-				$meta_query_args[] = array(
-					'key'     => 'verify_user',
-					'value'   => 'on',
-					'compare' => '='
-				);
 
 				if( !empty( $meta_query_args ) ) {
 					$query_relation = array('relation' => 'AND',);
@@ -550,27 +536,24 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 			} else if( $request['listing_type'] === 'teams' ){
 				$id	= $request['id'];
 				if( empty( $id ) ){
-					$items['type']	= 'error';
+					$items['type']		= 'error';
 					$items['message']	= esc_html__('Please provide user id.','docdirect_api');
-					return new WP_REST_Response($items, 200);
+					return new WP_REST_Response($items, 203);
 				}
 
 				$teams    = get_user_meta($id,'teams_data', true);
 				$teams    = !empty($teams) && is_array( $teams ) ? $teams : array();
-
+				
 				if( empty( $teams ) ){
-					$json['type']	= 'error';
+					$json['type']		= 'error';
 					$json['message']	= esc_html__('No user is added in the teams.','docdirect_api');
 					return new WP_REST_Response($json, 203);
 				}
-
-				$total_users = (int)count($teams); //Total Users
-
-
+				
 				$query_args	= array('role'  	=> 'professional',
 									'include' 	=> $teams
 								);
-				
+
 			} elseif( $request['listing_type'] === 'favorites' ){
 				$items	= array();
 				$user_id	= $request['user_id'];
@@ -653,7 +636,30 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 				return new WP_REST_Response($json, 203);
 			}
 			
+			//Verify user
+			$meta_query_args[] = array(
+										'key'     => 'verify_user',
+										'value'   => 'on',
+										'compare' => '='
+									);
+			$meta_query_args[] = array(
+									'key'     => 'profile_status',
+									'value'   => 'active',
+									'compare' => '='
+								);
+			
+			if(  !empty( $query_args['meta_query'] ) ) {
+				$meta_query	= array_merge($meta_query_args,$query_args['meta_query']);
+			} else{
+				$meta_query	= $meta_query_args;
+			}
+			
+			if( !empty( $meta_query ) ){
+				$query_args['meta_query']	= $meta_query;
+			}
+
             $user_query  = new WP_User_Query($query_args);
+			
             if ( ! empty( $user_query->results ) ) {
                 $items	= array();
                 foreach ( $user_query->results as $user ) {
@@ -664,35 +670,36 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
                         array('width'=>270,'height'=>270) //size width,height
                     );
 					
-                    $review_data	= docdirect_get_everage_rating ( $user->ID );
-                    $doc_type_id = get_user_meta( $user->ID, 'directory_type', true);
-                    $postdata = get_post($doc_type_id);
-                    $slug 	 = $postdata->post_name;
-                    $item['id'] = $user->ID;
-                    $item['author_url'] = get_author_posts_url($user->ID);
-                    $item['verified']  = get_user_meta($user->ID, 'verify_user', true);
-                    $item['img_url'] = $avatar;
-                    $item['directory_type'] = $doc_type_id;
-                    $item['directory_type_name'] = get_the_title( $doc_type_id );
-                    $item['directoty_type_slug'] = $slug;
-                    $item['directory_type_url'] = esc_url( get_permalink($doc_type_id));
-                    $item['name'] = $user->first_name.' '.$user->last_name;
-                    if( isset( $reviews_switch ) && $reviews_switch === 'enable' ){
-                        $item['rating']  =  docdirect_get_rating_stars_v2($review_data,'echo');
-                    }
+					$banner			= docdirect_get_user_banner(array('width'=>1920,'height'=>450), $user->ID);
 					
-                    $item['address'] = $user->user_address;
-                    $item['phone'] = $user->phone_number;
-                    $item['fax'] = $user->fax;
-                    $item['email'] = $user->user_email;
-                    $item['website'] = $user->user_url;
+                    $review_data	= docdirect_get_everage_rating ( $user->ID );
+                    $doc_type_id 	= get_user_meta( $user->ID, 'directory_type', true);
+                    $postdata 		= get_post($doc_type_id);
+                    $slug 	 		= $postdata->post_name;
+                    $item['id'] 	= $user->ID;
+                    $item['author_url'] = get_author_posts_url($user->ID);
+                    $item['verified']  	= get_user_meta($user->ID, 'verify_user', true);
+                    $item['img_url'] 	= $avatar;
+					$item['banner'] 	= $banner;
+                    $item['directory_type'] 		= $doc_type_id;
+                    $item['directory_type_name'] 	= get_the_title( $doc_type_id );
+                    $item['directoty_type_slug'] 	= $slug;
+                    $item['directory_type_url'] 	= esc_url( get_permalink($doc_type_id));
+                    $item['name'] = docdirect_get_username($user->ID);
+
+                    $item['address'] 	= $user->user_address;
+                    $item['phone'] 		= $user->phone_number;
+                    $item['fax'] 		= $user->fax;
+                    $item['email'] 		= $user->user_email;
+                    $item['website'] 	= $user->user_url;
                     $item['category_color'] = fw_get_db_post_option($doc_type_id, 'category_color');
 					
 					$reviews_switch     = fw_get_db_post_option($directory_type, 'reviews', true);
 					$review_data		= docdirect_get_everage_rating ( $user->ID );
 					$item['review_data'] 	= $review_data;
-					$item['rating'] 	= number_format((float)$review_data['average_rating'], 1, '.', '');
-                    $item['likes']    	= get_user_meta($user->ID,'doc_user_likes_count', true);
+					$item['rating'] 	= !empty( $review_data['average_rating'] ) ? number_format((float)$review_data['average_rating'], 1, '.', '') :0;
+					$count_views		= get_user_meta($user->ID,'doc_user_likes_count', true);
+                    $item['likes']    	= !empty( $count_views ) ? $count_views : 0;;
 					
 					$meta_list = array( 'user_type' => '',
 						'full_name' => '',
@@ -1058,7 +1065,8 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 				
 				return new WP_REST_Response($items, 200);
             }else{
-				return new WP_REST_Response($json, 203);
+				$items[] = $json;
+				return new WP_REST_Response($items, 203);
 			} 
         }
 

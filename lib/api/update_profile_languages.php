@@ -1,4 +1,15 @@
 <?php
+/**
+ * APP API to save language settings
+ *
+ * This file will include all global settings which will be used in all over the plugin,
+ * It have gatter and setter methods
+ *
+ * @link              https://themeforest.net/user/amentotech/portfolio
+ * @since             1.0.0
+ * @package           Docdirect App
+ *
+ */
 if (!class_exists('DocdirectUpdateUserLanguagesSettingRoutes')) {
 
     class DocdirectUpdateUserLanguagesSettingRoutes extends WP_REST_Controller
@@ -41,7 +52,7 @@ if (!class_exists('DocdirectUpdateUserLanguagesSettingRoutes')) {
                 //Form validation    
                 if( empty( $request['key'] ) ){
                     $json['type']       = 'error';
-                    $json['message']    = esc_html__('Language key needed', 'docdirect');
+                    $json['message']    = esc_html__('Language key needed', 'docdirect_api');
                     return new WP_REST_Response($json, 200);
                 }
 
@@ -51,11 +62,11 @@ if (!class_exists('DocdirectUpdateUserLanguagesSettingRoutes')) {
                 update_user_meta($user_identity, 'languages', $user_data);   
 
                 $json['type'] 		= 'success';
-                $json['message'] 	= esc_html__('Settings saved.', 'docdirect');
+                $json['message'] 	= esc_html__('Settings saved.', 'docdirect_api');
                 return new WP_REST_Response($json, 200);
             } else{
 				 $json['type']       = 'error';
-				$json['message']     = esc_html__('User ID is required', 'docdirect');
+				$json['message']     = esc_html__('User ID is required', 'docdirect_api');
 				return new WP_REST_Response($json, 203);           
 			}
         }

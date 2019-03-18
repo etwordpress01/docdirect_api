@@ -47,9 +47,9 @@ if (!class_exists('DocdirectAppCurrentPackageRoutes')) {
                 $package_expiry	= !empty( $package_expiry ) ? date( 'Y-m-d', $package_expiry ) : '';
 
                 if( !empty( $package_expiry ) && strtotime( $package_expiry )  > strtotime( $current_date ) ) {
-                    $package_title	= !empty( $current_package ) ? get_the_title($current_package) : esc_html__('NILL','docdirect');
+                    $package_title	= !empty( $current_package ) ? get_the_title($current_package) : esc_html__('NILL','docdirect_api');
                 }else{
-                    $package_title	=  esc_html__('NILL','docdirect');
+                    $package_title	=  esc_html__('NILL','docdirect_api');
                 }
                 $item['Package Title'] = $package_title;
                 $items[] = $item;
