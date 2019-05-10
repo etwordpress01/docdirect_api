@@ -636,12 +636,15 @@ if (!class_exists('DocdirectAppGetProvidersRoutes')) {
 				return new WP_REST_Response($json, 203);
 			}
 			
-			//Verify user
-			$meta_query_args[] = array(
-										'key'     => 'verify_user',
-										'value'   => 'on',
-										'compare' => '='
-									);
+			if( $request['listing_type'] !== 'profile_data' ){
+				//Verify user
+				$meta_query_args[] = array(
+											'key'     => 'verify_user',
+											'value'   => 'on',
+											'compare' => '='
+										);
+			}
+			
 			$meta_query_args[] = array(
 									'key'     => 'profile_status',
 									'value'   => 'active',

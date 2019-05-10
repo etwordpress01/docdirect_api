@@ -182,14 +182,14 @@ if (!class_exists('DocdirectApp_User_Route')) {
                 $user = wp_signon($creds, false);
 				
 				if (is_wp_error($user)) {
-                    $json['type']	= 'error';
+                    $json['type']		= 'error';
                     $json['message']	= esc_html__('Some error occur, please try again later.','docdirect_api');
 					return new WP_REST_Response($json, 203);
                 } else {
 					
 					unset($user->allcaps);
 					unset($user->filter);
-
+					$user->data->user_type	= get_user_meta($user->data->ID , 'user_type' , true);
 					$user->meta = get_user_meta($user->data->ID, '', true);
 
 					$user->avatar = apply_filters(
@@ -200,9 +200,9 @@ if (!class_exists('DocdirectApp_User_Route')) {
 					
 					$user->banner = docdirect_get_user_banner(array('width'=>1920,'height'=>450), $user->data->ID);
 					
-                    $json['type'] = "success";
-                    $json['message'] = esc_html__('You are logged in successfully', 'docdirect_api');
-                    $json['data'] 	 = $user;
+                    $json['type'] 		= "success";
+                    $json['message'] 	= esc_html__('You are logged in successfully', 'docdirect_api');
+                    $json['data'] 	 	= $user;
                     return new WP_REST_Response($json, 200);
                 }                
             }

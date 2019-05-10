@@ -208,7 +208,7 @@ if (!class_exists('DocdirectAppImageUploaderRoutes')) {
 			
 			$attach_id = wp_insert_attachment( $attachment, $filename, 0 );
 			require_once(ABSPATH . 'wp-admin/includes/image.php');
-			$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+			$attach_data 	= wp_generate_attachment_metadata( $attach_id, $filename );
 			wp_update_attachment_metadata( $attach_id, $attach_data );
 			
 			return $attach_id;
