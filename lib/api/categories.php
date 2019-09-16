@@ -58,12 +58,18 @@ if (!class_exists('DocdirectAppCategoryRoutes')) {
                    
 					$item = array();
                 	$category_image = fw_get_db_post_option($dir->ID, 'category_image', true);
+					$dir_map_marker = fw_get_db_post_option($dir->ID, 'dir_map_marker', true);
                     $item['id'] 	= $dir->ID;
                     $item['title']  = get_the_title($dir->ID);
                     
                     if( empty( $category_image['attachment_id'] ) ){
                         $item['category_image']['url']				= '';
 						$item['category_image']['attachment_id']	= '';
+                    }
+					
+					if( empty( $dir_map_marker['attachment_id'] ) ){
+                        $item['dir_map_marker']['url']				= '';
+						$item['dir_map_marker']['attachment_id']	= '';
                     }
                     
                     $item 		 	+= unserialize($meta['fw_options'][0]);
