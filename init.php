@@ -15,7 +15,7 @@
  * Plugin Name:       Docdirect APP Configurations
  * Plugin URI:        https://themeforest.net/user/amentotech/portfolio
  * Description:       This plugin is used for creating custom API for Docdirect Theme
- * Version:           1.0
+ * Version:           1.0.2
  * Author:            Amento Tech
  * Author URI:        https://themeforest.net/user/amentotech
  * License:           GPL-2.0+
